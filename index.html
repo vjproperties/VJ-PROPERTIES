@@ -1,0 +1,2982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VJ PROPERTIES – Buy. Sell. Rent.</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+/* ============================================================
+   RESET & VARIABLES
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0B1426; --navy2:#152038; --navy3:#1C2D4A;
+  --gold:#C9A84C; --gold2:#E8C97A; --gold3:#F5DFA0;
+  --white:#FAFAF8; --offwhite:#F2EFE9; --light:#EAE6DF;
+  --gray:#8B949E; --gray2:#6B7280; --border:#DDD8D0;
+  --green:#10B981; --red:#EF4444;
+  --shadow:0 2px 16px rgba(11,20,38,.08);
+  --shadow2:0 8px 32px rgba(11,20,38,.16);
+  --r:14px; --r2:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--offwhite);color:var(--navy);min-height:100vh;padding-bottom:72px;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;object-fit:cover}
+button{font-family:'DM Sans',sans-serif;cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:'DM Sans',sans-serif;outline:none}
+a{text-decoration:none;color:inherit}
+.serif{font-family:'Cormorant Garamond',serif}
+::-webkit-scrollbar{height:4px;width:4px}
+::-webkit-scrollbar-track{background:var(--light)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header{
+  position:sticky;top:0;z-index:900;
+  background:var(--navy);
+  padding:0 16px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(201,168,76,.2);
+  box-shadow:0 2px 20px rgba(0,0,0,.35);
+}
+.header-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
+.logo-icon{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;color:var(--navy);
+  box-shadow:0 3px 12px rgba(201,168,76,.4);
+}
+.logo-name{color:#fff;font-weight:700;font-size:.95rem;line-height:1.1}
+.logo-tag{color:var(--gold);font-size:.6rem;letter-spacing:1.8px;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:8px}
+.header-btn{
+  display:flex;align-items:center;gap:6px;
+  background:transparent;color:rgba(255,255,255,.7);
+  font-size:.78rem;font-weight:500;padding:7px 13px;
+  border:1.5px solid rgba(255,255,255,.15);border-radius:8px;
+  transition:.2s;
+}
+.header-btn:hover,.header-btn.gold{border-color:var(--gold);color:var(--gold)}
+.header-btn.gold{background:rgba(201,168,76,.1)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  background:linear-gradient(160deg,#060E1A 0%,#0B1426 50%,#0E1F3A 100%);
+  padding:26px 16px 22px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 600px 400px at -10% 80%,rgba(201,168,76,.13) 0%,transparent 70%),
+    radial-gradient(ellipse 400px 300px at 110% 20%,rgba(0,180,220,.08) 0%,transparent 60%);
+}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.hero-inner{position:relative;z-index:1}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);
+  color:var(--gold);padding:5px 14px;border-radius:50px;
+  font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:14px;
+}
+.pulse-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.9rem,6vw,3rem);font-weight:700;color:#fff;
+  line-height:1.1;margin-bottom:6px;
+}
+.hero-title em{color:var(--gold);font-style:italic}
+.hero-sub{color:rgba(255,255,255,.5);font-size:.82rem;margin-bottom:22px;line-height:1.5}
+
+/* Property type tabs */
+.prop-tabs{display:flex;gap:10px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.prop-tabs::-webkit-scrollbar{display:none}
+.prop-tab{
+  flex-shrink:0;display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);
+  border-radius:10px;padding:10px 14px;cursor:pointer;transition:.2s;
+  color:rgba(255,255,255,.75);font-size:.78rem;font-weight:500;min-width:130px;
+}
+.prop-tab:hover,.prop-tab.active{background:rgba(201,168,76,.15);border-color:var(--gold);color:var(--gold2)}
+.prop-tab-icon{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;color:var(--navy);flex-shrink:0;
+}
+
+/* Search box */
+.search-box{
+  background:rgba(255,255,255,.06);backdrop-filter:blur(16px);
+  border:1.5px solid rgba(255,255,255,.12);border-radius:var(--r);padding:12px;
+}
+.search-row1{display:flex;gap:8px;margin-bottom:8px}
+.city-btn{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);
+  border-radius:8px;padding:10px 12px;color:var(--gold2);
+  font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;
+  position:relative;transition:.2s;
+}
+.city-btn:hover{background:rgba(201,168,76,.2)}
+.city-dropdown{
+  position:absolute;top:calc(100% + 6px);left:0;z-index:200;
+  background:var(--navy2);border:1px solid rgba(201,168,76,.2);
+  border-radius:10px;min-width:160px;overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;
+}
+.city-dropdown.open{display:block}
+.city-option{
+  padding:10px 14px;color:rgba(255,255,255,.75);font-size:.82rem;
+  cursor:pointer;transition:.15s;
+}
+.city-option:hover{background:rgba(201,168,76,.1);color:var(--gold2)}
+.search-input-wrap{flex:1;position:relative}
+.search-input{
+  width:100%;padding:10px 38px 10px 14px;
+  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:10px;color:#fff;font-size:.85rem;transition:.2s;
+}
+.search-input::placeholder{color:rgba(255,255,255,.35)}
+.search-input:focus{border-color:var(--gold)}
+.search-icon-btn{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:transparent;color:rgba(255,255,255,.5);font-size:.9rem;border:none;cursor:pointer;
+}
+.search-go-btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-weight:700;font-size:.82rem;
+  padding:10px 16px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;gap:5px;
+  box-shadow:0 4px 14px rgba(201,168,76,.35);transition:.2s;
+}
+.search-go-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,168,76,.45)}
+.search-filters{display:flex;gap:8px}
+.filter-select{
+  flex:1;padding:9px 10px;
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:8px;color:rgba(255,255,255,.7);font-size:.78rem;cursor:pointer;appearance:none;
+}
+.filter-select option{background:#0B1426;color:#fff}
+.filter-select:focus{border-color:var(--gold)}
+
+/* Location chips */
+.loc-chips{display:flex;gap:8px;margin-top:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.loc-chips::-webkit-scrollbar{display:none}
+.loc-chip{
+  flex-shrink:0;display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:50px;padding:7px 13px;color:rgba(255,255,255,.65);font-size:.73rem;
+  cursor:pointer;transition:.2s;
+}
+.loc-chip:hover{border-color:var(--gold);color:var(--gold)}
+.loc-chip i{color:var(--gold);font-size:.75rem}
+
+/* Stats strip */
+.stats-strip{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  background:linear-gradient(90deg,var(--navy2),var(--navy3));
+  border-bottom:1px solid rgba(201,168,76,.15);
+}
+.stats-strip::-webkit-scrollbar{display:none}
+.stat-cell{flex:0 0 auto;min-width:100px;text-align:center;padding:12px 16px;border-right:1px solid rgba(255,255,255,.06)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--gold)}
+.stat-lbl{color:rgba(255,255,255,.45);font-size:.62rem;letter-spacing:.5px;margin-top:1px}
+
+/* ============================================================
+   SECTION COMMON
+   ============================================================ */
+.section{padding:26px 0}
+.section-head{padding:0 16px;margin-bottom:16px}
+.section-tag{color:var(--gold);font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--navy);line-height:1.15}
+.section-title em{color:var(--gold);font-style:italic}
+.section-row{display:flex;justify-content:space-between;align-items:flex-end}
+.view-all{
+  display:flex;align-items:center;gap:4px;
+  color:var(--gold);font-size:.78rem;font-weight:600;cursor:pointer;
+  padding:6px 12px;border:1px solid rgba(201,168,76,.3);border-radius:7px;
+  transition:.2s;white-space:nowrap;
+}
+.view-all:hover{background:rgba(201,168,76,.08)}
+.section-sub{color:var(--gray2);font-size:.77rem;margin-top:3px}
+
+/* No results */
+.no-results{
+  text-align:center;padding:40px 20px;color:var(--gray2);
+  display:none;
+}
+.no-results i{font-size:2.5rem;color:var(--border);margin-bottom:12px;display:block}
+.no-results p{font-size:.88rem}
+
+/* ============================================================
+   PROPERTY CARDS
+   ============================================================ */
+.cards-scroll{display:flex;gap:14px;overflow-x:auto;padding:4px 16px 12px;scrollbar-width:none}
+.cards-scroll::-webkit-scrollbar{display:none}
+
+.prop-card{
+  flex:0 0 258px;background:#fff;border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;cursor:pointer;
+}
+.prop-card:hover{transform:translateY(-5px);box-shadow:var(--shadow2)}
+.prop-card-img{position:relative;height:168px;overflow:hidden;background:#eee}
+.prop-card-img img{width:100%;height:100%;transition:transform .5s}
+.prop-card:hover .prop-card-img img{transform:scale(1.06)}
+.prop-card-badge{
+  position:absolute;top:10px;left:10px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);padding:3px 10px;border-radius:6px;
+  font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+}
+.badge-green{background:linear-gradient(135deg,#10B981,#34D399)!important}
+.badge-purple{background:linear-gradient(135deg,#8B5CF6,#A78BFA)!important}
+.prop-card-wish{
+  position:absolute;top:10px;right:10px;
+  background:rgba(255,255,255,.92);border-radius:8px;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;cursor:pointer;transition:.2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);color:var(--gray2);
+}
+.prop-card-wish:hover{background:#fff;transform:scale(1.12)}
+.prop-card-wish.active{color:var(--red)}
+.prop-card-rating{
+  position:absolute;bottom:10px;left:10px;
+  background:rgba(0,0,0,.62);backdrop-filter:blur(4px);
+  color:#fff;padding:3px 9px;border-radius:6px;font-size:.68rem;font-weight:600;
+  display:flex;align-items:center;gap:4px;
+}
+.prop-card-rating i{color:#FBBF24;font-size:.65rem}
+.prop-360{
+  position:absolute;bottom:10px;right:10px;
+  background:rgba(0,0,0,.55);color:#fff;
+  border-radius:6px;padding:3px 8px;font-size:.62rem;font-weight:600;
+  display:flex;align-items:center;gap:3px;
+}
+.prop-card-body{padding:13px}
+.prop-card-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.2}
+.prop-card-loc{display:flex;align-items:center;gap:4px;color:var(--gray2);font-size:.72rem;margin-bottom:9px}
+.prop-card-loc i{color:var(--gold);font-size:.72rem}
+.prop-card-price{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.prop-card-config{color:var(--gray2);font-size:.72rem;margin-bottom:2px}
+.prop-card-area{color:var(--gray2);font-size:.72rem;margin-bottom:11px;display:flex;align-items:center;gap:4px}
+.prop-card-area i{font-size:.7rem}
+.prop-card-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--light);padding-top:10px;gap:8px}
+.prop-card-status{background:var(--offwhite);color:var(--gray2);padding:4px 9px;border-radius:6px;font-size:.65rem;font-weight:600;white-space:nowrap}
+.prop-card-actions{display:flex;gap:6px}
+.prop-card-cta{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.7rem;font-weight:700;
+  padding:7px 12px;border-radius:8px;
+  box-shadow:0 3px 10px rgba(201,168,76,.3);transition:.2s;
+  display:flex;align-items:center;gap:4px;white-space:nowrap;
+}
+.prop-card-cta:hover{transform:translateY(-1px)}
+.prop-card-compare{
+  background:var(--offwhite);color:var(--gray2);font-size:.7rem;font-weight:600;
+  padding:7px 10px;border-radius:8px;transition:.2s;border:1px solid var(--border);
+  display:flex;align-items:center;gap:3px;
+}
+.prop-card-compare:hover{border-color:var(--gold);color:var(--gold)}
+.prop-card-compare.active{background:rgba(201,168,76,.1);border-color:var(--gold);color:var(--gold)}
+
+/* ============================================================
+   DISCOUNT BANNER
+   ============================================================ */
+.discount-banner{
+  margin:0 16px 24px;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  border:1px solid rgba(201,168,76,.2);border-radius:var(--r);
+  padding:18px;position:relative;overflow:hidden;
+}
+.discount-banner::after{
+  content:'';position:absolute;right:-30px;top:-30px;
+  width:130px;height:130px;
+  background:radial-gradient(circle,rgba(201,168,76,.15),transparent 70%);
+  border-radius:50%;
+}
+.discount-banner-tag{color:var(--gold);font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.discount-banner-title{color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:5px;line-height:1.3}
+.discount-banner-sub{color:rgba(255,255,255,.5);font-size:.74rem;line-height:1.5;margin-bottom:12px}
+.discount-banner-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.75rem;font-weight:700;
+  padding:9px 18px;border-radius:8px;cursor:pointer;transition:.2s;
+  box-shadow:0 4px 12px rgba(201,168,76,.3);
+}
+.discount-banner-btn:hover{transform:translateY(-1px)}
+
+/* ============================================================
+   BUILDERS
+   ============================================================ */
+.builders-scroll{display:flex;gap:12px;overflow-x:auto;padding:4px 16px 12px;scrollbar-width:none}
+.builders-scroll::-webkit-scrollbar{display:none}
+.builder-card{
+  flex:0 0 190px;background:#fff;border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);transition:.3s;cursor:pointer;
+}
+.builder-card:hover{transform:translateY(-4px);box-shadow:var(--shadow2)}
+.builder-img{height:95px;overflow:hidden}
+.builder-img img{width:100%;height:100%}
+.builder-body{padding:11px}
+.builder-name{font-weight:700;font-size:.88rem;color:var(--navy);margin-bottom:3px}
+.builder-stars{display:flex;align-items:center;gap:3px;margin-bottom:3px}
+.builder-stars i{color:#FBBF24;font-size:.65rem}
+.builder-rating-text{color:var(--gray2);font-size:.68rem}
+.builder-projects{color:var(--gold);font-size:.7rem;font-weight:600;display:flex;align-items:center;gap:4px}
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+.testi-scroll{display:flex;gap:14px;overflow-x:auto;padding:4px 16px 12px;scrollbar-width:none}
+.testi-scroll::-webkit-scrollbar{display:none}
+.testi-card{
+  flex:0 0 276px;background:#fff;border-radius:var(--r);padding:18px;
+  box-shadow:var(--shadow);transition:.3s;
+}
+.testi-card:hover{transform:translateY(-4px);box-shadow:var(--shadow2)}
+.testi-quote-box{
+  width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  color:var(--navy);margin-bottom:10px;
+}
+.testi-content{display:flex;gap:9px;margin-bottom:12px}
+.testi-accent{width:3px;border-radius:2px;background:var(--gold);flex-shrink:0}
+.testi-text{color:#555;font-size:.8rem;line-height:1.65;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+.testi-name{font-weight:700;font-size:.82rem;color:var(--navy)}
+.testi-stars-row{display:flex;gap:2px;margin-top:2px}
+.testi-stars-row i{color:#FBBF24;font-size:.6rem}
+
+/* ============================================================
+   ARTICLES
+   ============================================================ */
+.articles-scroll{display:flex;gap:14px;overflow-x:auto;padding:4px 16px 12px;scrollbar-width:none}
+.articles-scroll::-webkit-scrollbar{display:none}
+.article-card{
+  flex:0 0 234px;background:#fff;border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);transition:.3s;cursor:pointer;
+}
+.article-card:hover{transform:translateY(-4px);box-shadow:var(--shadow2)}
+.article-img{position:relative;height:135px;overflow:hidden}
+.article-img img{width:100%;height:100%;transition:transform .5s}
+.article-card:hover .article-img img{transform:scale(1.07)}
+.article-region{
+  position:absolute;top:10px;right:10px;
+  background:rgba(11,20,38,.75);backdrop-filter:blur(4px);
+  color:var(--gold);padding:3px 9px;border-radius:6px;font-size:.62rem;font-weight:600;
+}
+.article-author{
+  position:absolute;bottom:10px;left:10px;
+  color:rgba(255,255,255,.8);font-size:.65rem;display:flex;align-items:center;gap:4px;
+}
+.article-body{padding:12px}
+.article-title{font-weight:600;font-size:.8rem;color:var(--navy);line-height:1.45}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{background:#fff;border-top:1px solid var(--light);padding:22px 16px 18px}
+.footer-acc-item{border-bottom:1px solid var(--light)}
+.footer-acc-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 0;cursor:pointer;
+}
+.footer-acc-head span{color:var(--gold);font-size:.86rem;font-weight:600}
+.footer-acc-arrow{color:var(--gold);transition:transform .3s;font-size:.8rem}
+.footer-acc-item.open .footer-acc-arrow{transform:rotate(90deg)}
+.footer-acc-body{display:none;padding-bottom:12px}
+.footer-acc-item.open .footer-acc-body{display:block}
+.footer-links-wrap{display:flex;flex-wrap:wrap;gap:7px}
+.footer-link{
+  color:var(--gray2);font-size:.74rem;padding:4px 10px;
+  background:var(--offwhite);border-radius:6px;cursor:pointer;transition:.2s;
+}
+.footer-link:hover{color:var(--gold);background:rgba(201,168,76,.08)}
+.footer-about{
+  color:var(--gray2);font-size:.76rem;line-height:1.7;
+  margin:18px 0;border-top:1px solid var(--light);padding-top:16px;
+}
+.footer-about strong{color:var(--navy)}
+.footer-socials{display:flex;gap:10px;margin-top:14px}
+.footer-social{
+  width:38px;height:38px;background:var(--navy);color:#fff;
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;cursor:pointer;transition:.2s;text-decoration:none;
+}
+.footer-social:hover{background:var(--gold);color:var(--navy);transform:translateY(-2px)}
+.footer-copy{text-align:center;color:var(--gray);font-size:.7rem;margin-top:18px;padding-top:14px;border-top:1px solid var(--light)}
+.footer-badges{display:flex;justify-content:center;gap:8px;margin-top:9px;flex-wrap:wrap}
+.footer-badge{border:1px solid rgba(201,168,76,.35);color:var(--gold);padding:3px 11px;border-radius:6px;font-size:.62rem;letter-spacing:.5px;font-weight:600}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:800;
+  background:var(--navy);border-top:1px solid rgba(201,168,76,.2);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:5px 0 10px;box-shadow:0 -4px 20px rgba(0,0,0,.3);
+}
+.bn-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;padding:4px 10px;transition:.2s;
+  color:rgba(255,255,255,.4);font-size:.58rem;font-weight:500;letter-spacing:.3px;
+}
+.bn-item.active,#bnHome.active{color:var(--gold)}
+.bn-item i{font-size:1.1rem;margin-bottom:1px}
+.bn-plus-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+.bn-plus{
+  width:46px;height:46px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:var(--navy);
+  box-shadow:0 4px 14px rgba(201,168,76,.5);transition:.2s;margin-bottom:2px;
+}
+.bn-plus:hover{transform:scale(1.08)}
+.bn-plus-lbl{color:rgba(255,255,255,.4);font-size:.58rem}
+.bn-badge-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wish-count{
+  position:absolute;top:-4px;right:-2px;
+  background:var(--red);width:16px;height:16px;border-radius:50%;
+  color:#fff;font-size:.55rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ============================================================
+   DETAIL PAGE
+   ============================================================ */
+.detail-page{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:var(--offwhite);overflow-y:auto;padding-bottom:80px;
+}
+.detail-page.open{display:block}
+.detail-header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(11,20,38,.94);backdrop-filter:blur(14px);
+  padding:12px 16px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid rgba(201,168,76,.15);
+}
+.d-back{
+  background:rgba(255,255,255,.1);border-radius:8px;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:rgba(255,255,255,.8);transition:.2s;font-size:.9rem;
+}
+.d-back:hover{background:rgba(201,168,76,.2);color:var(--gold)}
+.d-header-title{color:#fff;font-weight:600;font-size:.88rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-header-actions{display:flex;gap:7px}
+.d-action{
+  background:rgba(255,255,255,.1);border-radius:8px;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:rgba(255,255,255,.65);transition:.2s;font-size:.85rem;
+}
+.d-action:hover,.d-action.active{background:rgba(201,168,76,.2);color:var(--gold)}
+.d-action.wish-active{color:var(--red)}
+
+/* Hero image */
+.d-hero{position:relative;height:255px;overflow:hidden;background:var(--navy2)}
+.d-hero img{width:100%;height:100%;object-fit:cover}
+.d-hero-badge{
+  position:absolute;top:14px;left:14px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);padding:4px 12px;border-radius:7px;
+  font-size:.68rem;font-weight:800;text-transform:uppercase;
+}
+.d-hero-rating{
+  position:absolute;bottom:14px;left:14px;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);
+  color:#fff;padding:5px 12px;border-radius:8px;font-size:.73rem;font-weight:600;
+  display:flex;align-items:center;gap:5px;
+}
+.d-hero-rating i{color:#FBBF24}
+.d-photos-count{
+  position:absolute;bottom:14px;right:14px;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);
+  color:#fff;padding:5px 12px;border-radius:8px;font-size:.7rem;font-weight:600;
+  display:flex;align-items:center;gap:5px;cursor:pointer;
+}
+
+/* Media tabs */
+.media-tabs{
+  display:flex;gap:8px;padding:11px 16px;background:#fff;
+  overflow-x:auto;border-bottom:1px solid var(--light);scrollbar-width:none;
+}
+.media-tabs::-webkit-scrollbar{display:none}
+.m-tab{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--offwhite);border:1.5px solid var(--border);border-radius:10px;
+  padding:8px 12px;cursor:pointer;transition:.2s;min-width:76px;
+}
+.m-tab:hover,.m-tab.active{background:rgba(201,168,76,.1);border-color:var(--gold)}
+.m-tab i{font-size:1rem;color:var(--navy)}
+.m-tab.active i{color:var(--gold)}
+.m-tab span{font-size:.62rem;font-weight:600;color:var(--navy);letter-spacing:.3px}
+
+/* Detail body */
+.d-body{padding:15px}
+.d-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.2}
+.d-loc{display:flex;align-items:center;gap:5px;color:var(--gray2);font-size:.78rem;margin-bottom:14px}
+.d-loc i{color:var(--gold)}
+
+/* Config box */
+.d-config{background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:13px}
+.d-config-grid{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border)}
+.d-config-cell{padding:12px 13px}
+.d-config-cell:first-child{border-right:1px solid var(--border)}
+.d-config-key{color:var(--gray);font-size:.68rem;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.d-config-val{font-weight:700;font-size:.92rem;color:var(--navy)}
+.d-config-val em{font-size:.72rem;color:var(--gray);font-style:normal;font-weight:400}
+.d-config-area{padding:11px 13px;display:flex;align-items:center;gap:5px}
+.d-config-area i{color:var(--gold);font-size:.8rem}
+.d-config-area span{font-weight:700;color:var(--navy);font-size:.86rem}
+.d-config-area em{color:var(--gray2);font-style:normal;font-size:.76rem}
+
+/* Highlights */
+.d-card{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:15px;margin-bottom:13px}
+.d-card-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.d-card-title i{color:var(--gold)}
+.highlights-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.highlight-item{
+  display:flex;align-items:flex-start;gap:7px;
+  padding:9px;background:var(--offwhite);border-radius:9px;
+}
+.highlight-icon{
+  width:28px;height:28px;border-radius:7px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--gold);flex-shrink:0;border:1px solid var(--border);
+}
+.highlight-text{font-size:.73rem;color:var(--navy);font-weight:500;line-height:1.3}
+
+/* Amenities */
+.amenities-wrap{display:flex;flex-wrap:wrap;gap:7px}
+.amenity-chip{
+  background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.22);
+  color:var(--navy);padding:5px 12px;border-radius:50px;font-size:.72rem;font-weight:500;
+  display:flex;align-items:center;gap:5px;
+}
+.amenity-chip i{color:var(--gold);font-size:.7rem}
+
+/* Nearby */
+.nearby-list{display:flex;flex-direction:column;gap:8px}
+.nearby-item{
+  display:flex;align-items:center;gap:10px;
+  background:var(--offwhite);border-radius:10px;padding:10px 12px;
+}
+.nearby-icon-box{
+  width:34px;height:34px;border-radius:8px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;flex-shrink:0;border:1px solid var(--border);color:var(--gold);
+}
+.nearby-name{font-size:.8rem;font-weight:600;color:var(--navy)}
+.nearby-type{font-size:.64rem;color:var(--gray2);text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+.nearby-dist{margin-left:auto;font-size:.7rem;color:var(--gold);font-weight:700}
+
+/* EMI calculator */
+.emi-wrap{background:var(--navy);border-radius:var(--r);padding:16px;margin-bottom:70px}
+.emi-title{color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.emi-title i{color:var(--gold)}
+.emi-label{color:rgba(255,255,255,.55);font-size:.72rem;margin-bottom:4px;display:flex;justify-content:space-between}
+.emi-label span{color:var(--gold2);font-weight:700}
+.emi-slider{
+  -webkit-appearance:none;width:100%;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.18);outline:none;margin-bottom:14px;cursor:pointer;
+}
+.emi-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--gold);cursor:pointer;box-shadow:0 2px 8px rgba(201,168,76,.5);
+}
+.emi-result{
+  background:rgba(255,255,255,.07);border:1px solid rgba(201,168,76,.2);
+  border-radius:10px;padding:12px;text-align:center;
+}
+.emi-result-label{color:rgba(255,255,255,.5);font-size:.7rem;margin-bottom:4px}
+.emi-result-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--gold2)}
+.emi-result-sub{color:rgba(255,255,255,.35);font-size:.65rem;margin-top:3px}
+
+/* Detail sticky CTA */
+.detail-cta{
+  position:fixed;bottom:0;left:0;right:0;z-index:1100;
+  display:none;
+  grid-template-columns:1fr 1fr;
+  box-shadow:0 -4px 20px rgba(0,0,0,.25);
+}
+.detail-page.open ~ .detail-cta,
+.detail-cta.visible{
+  display:grid;
+}
+.d-cta-btn{
+  padding:16px;font-size:.86rem;font-weight:700;font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:7px;transition:.2s;
+}
+.d-cta-btn.quote{background:var(--navy2);color:var(--gold);border-right:1px solid rgba(201,168,76,.2)}
+.d-cta-btn.quote:hover{background:var(--navy3)}
+.d-cta-btn.visit{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy)}
+.d-cta-btn.visit:hover{opacity:.92}
+
+/* ============================================================
+   BOOKING MODAL
+   ============================================================ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);
+  z-index:2000;display:none;align-items:flex-end;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.booking-sheet{
+  background:#fff;border-radius:var(--r2) var(--r2) 0 0;
+  width:100%;max-height:88vh;overflow-y:auto;
+  padding:18px 16px 36px;
+  animation:slideUp .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+.booking-title{font-family:'Cormorant Garamond',serif;font-size:1.28rem;font-weight:700;color:var(--navy);margin-bottom:3px}
+.booking-sub{color:var(--gray2);font-size:.76rem;margin-bottom:16px}
+
+/* Date picker */
+.booking-dates{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:none}
+.booking-dates::-webkit-scrollbar{display:none}
+.b-date{
+  flex:0 0 66px;text-align:center;padding:10px 6px;
+  border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;
+}
+.b-date:hover{border-color:var(--gold)}
+.b-date.active{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.b-day{font-size:.68rem;color:var(--gray2);margin-bottom:2px;text-transform:uppercase;letter-spacing:.5px}
+.b-num{font-weight:700;font-size:.98rem;color:var(--navy)}
+.b-date.active .b-num{color:var(--gold)}
+.b-mon{font-size:.62rem;color:var(--gray);margin-top:1px}
+
+/* Slot grid */
+.slots-label{font-size:.78rem;font-weight:600;color:var(--navy);margin-bottom:9px;display:flex;align-items:center;gap:5px}
+.slots-label i{color:var(--gold)}
+.slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.slot{
+  padding:9px;border:1.5px solid var(--border);border-radius:9px;
+  text-align:center;font-size:.74rem;font-weight:500;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.slot:hover{border-color:var(--gold)}
+.slot.active{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:var(--gold);color:var(--navy);font-weight:700}
+.slot i{font-size:.7rem}
+
+/* Contact form in booking */
+.form-group{margin-bottom:12px}
+.form-label{font-size:.74rem;font-weight:600;color:var(--navy);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.form-label i{color:var(--gold);font-size:.75rem}
+.form-input{
+  width:100%;padding:11px 13px;
+  border:1.5px solid var(--border);border-radius:9px;
+  font-size:.82rem;color:var(--navy);background:#fff;transition:.2s;
+}
+.form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Booking actions */
+.booking-confirm-btn{
+  width:100%;padding:14px;margin-top:4px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.9rem;font-weight:700;
+  border-radius:12px;transition:.2s;
+  box-shadow:0 4px 16px rgba(201,168,76,.35);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.booking-confirm-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,.45)}
+.booking-confirm-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.booking-cancel-btn{
+  width:100%;padding:12px;margin-top:8px;
+  background:transparent;color:var(--gray2);font-size:.82rem;font-weight:600;
+  border-radius:10px;border:1.5px solid var(--border);transition:.2s;
+}
+.booking-cancel-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* Booking success */
+.booking-success{text-align:center;padding:18px 0;display:none}
+.success-icon-wrap{
+  width:70px;height:70px;background:rgba(16,185,129,.1);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+  border:2px solid rgba(16,185,129,.3);
+}
+.success-icon-wrap i{font-size:2rem;color:var(--green)}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--navy);margin-bottom:7px}
+.success-sub{color:var(--gray2);font-size:.8rem;margin-bottom:16px;line-height:1.5}
+.booking-ref-box{background:var(--offwhite);border-radius:11px;padding:13px;margin-bottom:16px;text-align:left;border:1px solid var(--border)}
+.ref-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+.ref-row:not(:last-child){border-bottom:1px solid var(--light)}
+.ref-key{color:var(--gray2);font-size:.74rem;display:flex;align-items:center;gap:5px}
+.ref-key i{color:var(--gold)}
+.ref-val{font-weight:600;font-size:.78rem;color:var(--navy);text-align:right;max-width:55%}
+.success-close-btn{
+  width:100%;padding:13px;
+  background:var(--navy);color:#fff;font-size:.88rem;font-weight:700;
+  border-radius:11px;transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.success-close-btn:hover{background:var(--navy2)}
+.emailjs-note{
+  background:rgba(201,168,76,.06);border:1px dashed rgba(201,168,76,.3);
+  border-radius:8px;padding:10px 13px;margin-top:8px;
+  font-size:.7rem;color:var(--gray2);line-height:1.5;
+}
+.emailjs-note strong{color:var(--gold)}
+
+/* ============================================================
+   COMPARE PANEL
+   ============================================================ */
+.compare-strip{
+  position:fixed;top:58px;left:0;right:0;z-index:700;
+  background:linear-gradient(90deg,var(--navy),var(--navy2));
+  border-bottom:1px solid rgba(201,168,76,.2);
+  padding:9px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  transform:translateY(-100%);transition:transform .3s;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+}
+.compare-strip.show{transform:translateY(0)}
+.compare-strip-label{color:rgba(255,255,255,.7);font-size:.76rem;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.compare-strip-label i{color:var(--gold)}
+.compare-chips{display:flex;gap:7px;flex:1;overflow-x:auto;scrollbar-width:none}
+.compare-chips::-webkit-scrollbar{display:none}
+.compare-chip-item{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(201,168,76,.2);
+  border-radius:7px;padding:4px 10px;
+  color:rgba(255,255,255,.8);font-size:.7rem;white-space:nowrap;
+}
+.compare-chip-remove{
+  background:transparent;color:rgba(255,255,255,.4);font-size:.7rem;
+  cursor:pointer;transition:.2s;border:none;padding:0 0 0 4px;
+}
+.compare-chip-remove:hover{color:var(--red)}
+.compare-go-btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.75rem;font-weight:700;
+  padding:8px 14px;border-radius:8px;white-space:nowrap;
+  display:flex;align-items:center;gap:5px;transition:.2s;
+}
+.compare-go-btn:hover{transform:translateY(-1px)}
+
+/* Compare modal */
+.compare-modal{
+  display:none;position:fixed;inset:0;z-index:2500;
+  background:rgba(0,0,0,.7);overflow-y:auto;padding:20px 12px;
+}
+.compare-modal.open{display:block}
+.compare-sheet{
+  background:#fff;border-radius:var(--r2);padding:20px;
+  max-width:860px;margin:0 auto;
+}
+.compare-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.compare-header h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px}
+.compare-header h3 i{color:var(--gold)}
+.compare-close{background:var(--offwhite);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray2);font-size:.85rem;transition:.2s}
+.compare-close:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.compare-grid{display:grid;gap:16px;overflow-x:auto}
+.compare-prop-col{background:var(--offwhite);border-radius:var(--r);overflow:hidden;min-width:220px}
+.compare-prop-img{height:140px;overflow:hidden}
+.compare-prop-img img{width:100%;height:100%;object-fit:cover}
+.compare-prop-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--navy);padding:12px 12px 0}
+.compare-rows{padding:0 12px 12px}
+.compare-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--light);font-size:.76rem;
+}
+.compare-row:last-child{border-bottom:none}
+.compare-row-key{color:var(--gray2);display:flex;align-items:center;gap:5px}
+.compare-row-key i{color:var(--gold);font-size:.7rem}
+.compare-row-val{font-weight:600;color:var(--navy);text-align:right}
+.compare-view-btn{
+  margin:0 12px 12px;width:calc(100% - 24px);
+  padding:9px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.76rem;font-weight:700;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;gap:5px;transition:.2s;
+}
+.compare-view-btn:hover{transform:translateY(-1px)}
+
+/* ============================================================
+   NOTIFICATION TOAST
+   ============================================================ */
+.notif{
+  position:fixed;top:68px;left:50%;transform:translateX(-50%) translateY(-10px);
+  background:var(--navy);color:#fff;
+  padding:11px 20px;border-radius:50px;font-size:.78rem;font-weight:600;
+  border-left:3px solid var(--gold);white-space:nowrap;
+  z-index:3500;box-shadow:0 8px 24px rgba(0,0,0,.3);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s,transform .3s;
+  max-width:90vw;text-overflow:ellipsis;overflow:hidden;
+  display:flex;align-items:center;gap:7px;
+}
+.notif.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.notif i{font-size:.8rem}
+.notif.success i{color:var(--green)}
+.notif.error i{color:var(--red)}
+.notif.info i{color:var(--gold)}
+
+/* ============================================================
+   SEARCH RESULTS OVERLAY
+   ============================================================ */
+.search-results-overlay{
+  position:fixed;inset:0;z-index:1800;background:var(--offwhite);
+  overflow-y:auto;padding-bottom:80px;display:none;
+}
+.search-results-overlay.open{display:block}
+.search-results-header{
+  position:sticky;top:0;z-index:10;
+  background:#fff;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--light);
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.search-results-back{
+  background:var(--offwhite);border-radius:8px;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--navy);font-size:.9rem;border:1px solid var(--border);transition:.2s;
+}
+.search-results-back:hover{background:var(--light)}
+.search-results-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--navy);flex:1}
+.search-results-count{font-size:.75rem;color:var(--gold);font-weight:600;white-space:nowrap}
+.search-results-body{padding:14px 16px}
+.search-filters-bar{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.search-filters-bar::-webkit-scrollbar{display:none}
+.s-filter-chip{
+  flex:0 0 auto;padding:7px 14px;border:1.5px solid var(--border);border-radius:50px;
+  font-size:.74rem;font-weight:500;cursor:pointer;transition:.2s;background:#fff;color:var(--gray2);
+}
+.s-filter-chip:hover{border-color:var(--gold);color:var(--gold)}
+.s-filter-chip.active{border-color:var(--gold);background:rgba(201,168,76,.08);color:var(--gold);font-weight:700}
+.search-results-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.search-result-card{
+  background:#fff;border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);cursor:pointer;transition:.2s;
+}
+.search-result-card:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+.sr-img{height:130px;overflow:hidden;position:relative}
+.sr-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.search-result-card:hover .sr-img img{transform:scale(1.05)}
+.sr-badge{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);padding:2px 8px;border-radius:5px;font-size:.58rem;font-weight:800;text-transform:uppercase}
+.sr-wish{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.9);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.75rem;cursor:pointer;transition:.2s;color:var(--gray2)}
+.sr-wish:hover{transform:scale(1.1)}
+.sr-wish.active{color:var(--red)}
+.sr-body{padding:10px}
+.sr-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:2px;line-height:1.2}
+.sr-loc{color:var(--gray2);font-size:.67rem;margin-bottom:5px;display:flex;align-items:center;gap:3px}
+.sr-loc i{color:var(--gold);font-size:.65rem}
+.sr-price{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:1px}
+.sr-bhk{color:var(--gray2);font-size:.65rem}
+.sr-footer{display:flex;justify-content:space-between;align-items:center;margin-top:7px;padding-top:7px;border-top:1px solid var(--light)}
+.sr-rating{color:var(--gray2);font-size:.65rem;display:flex;align-items:center;gap:3px}
+.sr-rating i{color:#FBBF24;font-size:.62rem}
+.sr-view{background:var(--navy);color:#fff;font-size:.65rem;font-weight:700;padding:5px 10px;border-radius:6px;transition:.2s}
+.sr-view:hover{background:var(--gold);color:var(--navy)}
+
+/* Wishlist panel */
+.wishlist-panel{
+  position:fixed;inset:0;z-index:1600;background:rgba(0,0,0,.6);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.wishlist-panel.open{display:flex}
+.wishlist-sheet{
+  background:#fff;border-radius:var(--r2) var(--r2) 0 0;
+  width:100%;max-height:80vh;overflow-y:auto;
+  padding:18px 16px 36px;animation:slideUp .3s ease;
+}
+.wishlist-empty{text-align:center;padding:40px 20px;color:var(--gray2)}
+.wishlist-empty i{font-size:2.5rem;color:var(--border);display:block;margin-bottom:12px}
+.wishlist-empty p{font-size:.85rem}
+.wishlist-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wish-card{background:var(--offwhite);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.2s;border:1px solid var(--border)}
+.wish-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.wish-card-img{height:100px;overflow:hidden}
+.wish-card-img img{width:100%;height:100%;object-fit:cover}
+.wish-card-body{padding:10px}
+.wish-card-name{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:2px;line-height:1.2}
+.wish-card-price{font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:5px}
+.wish-remove{
+  display:flex;align-items:center;gap:4px;
+  color:var(--red);font-size:.68rem;font-weight:600;cursor:pointer;
+  background:transparent;border:none;padding:0;transition:.2s;
+}
+.wish-remove:hover{opacity:.7}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(min-width:1024px){
+  body{max-width:430px;margin:0 auto;box-shadow:0 0 60px rgba(0,0,0,.25)}
+  .bottom-nav,.detail-page,.modal-overlay,.compare-strip,
+  .wishlist-panel,.search-results-overlay,.compare-modal{max-width:430px;left:50%;transform:translateX(-50%)}
+  .modal-overlay.open,.wishlist-panel.open{display:flex}
+  .compare-modal.open,.search-results-overlay.open{display:block;left:50%;transform:translateX(-50%)}
+  .compare-strip.show{transform:translateX(-50%) translateY(0)}
+  .notif{max-width:400px}
+}
+
+/* ============================================================
+   ADMIN PANEL STYLES
+   ============================================================ */
+.admin-overlay{
+  position:fixed;inset:0;background:rgba(5,10,22,.85);
+  z-index:4000;display:none;align-items:center;justify-content:center;
+  padding:16px;backdrop-filter:blur(6px);
+}
+.admin-overlay.open{display:flex}
+.admin-box{
+  background:#fff;border-radius:20px;width:100%;max-width:460px;
+  max-height:92vh;overflow-y:auto;
+  box-shadow:0 28px 80px rgba(0,0,0,.5);
+  animation:adminPop .28s cubic-bezier(.4,0,.2,1);
+}
+@keyframes adminPop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.admin-hdr{
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  padding:18px 20px;border-radius:20px 20px 0 0;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:2px solid rgba(201,168,76,.25);
+  position:sticky;top:0;z-index:2;
+}
+.admin-hdr-left{display:flex;align-items:center;gap:10px}
+.admin-hdr-icon{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:.95rem;color:var(--navy);box-shadow:0 3px 10px rgba(201,168,76,.35);
+}
+.admin-hdr-title{color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;line-height:1.1}
+.admin-hdr-sub{color:rgba(255,255,255,.4);font-size:.63rem;margin-top:1px}
+.admin-hdr-close{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:9px;width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:rgba(255,255,255,.6);transition:.2s;font-size:.85rem;
+}
+.admin-hdr-close:hover{background:rgba(239,68,68,.2);color:#fca5a5;border-color:rgba(239,68,68,.3)}
+.admin-body{padding:20px}
+/* Login */
+.adm-login-icon{
+  width:60px;height:60px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;color:var(--navy);margin:4px auto 14px;
+  box-shadow:0 6px 20px rgba(201,168,76,.35);
+}
+.adm-login-title{text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.adm-login-sub{text-align:center;color:var(--gray2);font-size:.77rem;margin-bottom:22px;line-height:1.5}
+.adm-input-wrap{position:relative;margin-bottom:12px}
+.adm-input-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:.82rem;pointer-events:none}
+.adm-inp{
+  width:100%;padding:12px 14px 12px 36px;
+  border:1.5px solid var(--border);border-radius:10px;
+  font-size:.86rem;color:var(--navy);background:#fff;transition:.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.adm-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);outline:none}
+.adm-eye{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--gray);cursor:pointer;font-size:.82rem;transition:.2s;
+}
+.adm-eye:hover{color:var(--navy)}
+.adm-err{
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
+  border-radius:9px;padding:10px 13px;margin-bottom:12px;
+  color:#dc2626;font-size:.75rem;display:none;align-items:center;gap:7px;
+}
+.adm-err.show{display:flex}
+.adm-login-btn{
+  width:100%;padding:13px;margin-top:4px;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  color:#fff;font-size:.9rem;font-weight:700;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:.2s;box-shadow:0 4px 16px rgba(11,20,38,.3);
+}
+.adm-login-btn:hover{background:linear-gradient(135deg,var(--navy2),var(--navy3));transform:translateY(-1px)}
+.adm-login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.fb-note{
+  background:linear-gradient(135deg,rgba(251,146,60,.07),rgba(234,88,12,.04));
+  border:1px solid rgba(234,88,12,.18);border-radius:10px;
+  padding:11px 13px;margin-bottom:14px;
+}
+.fb-note-title{color:#ea580c;font-size:.72rem;font-weight:700;display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.fb-note-text{color:var(--gray2);font-size:.68rem;line-height:1.55}
+.fb-note-text code{background:rgba(234,88,12,.08);padding:1px 5px;border-radius:4px;color:#ea580c;font-size:.64rem}
+/* Dashboard */
+.adm-dash-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.adm-dash-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:7px}
+.adm-dash-title i{color:var(--gold)}
+.adm-signout-btn{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);
+  border-radius:8px;padding:7px 12px;color:#dc2626;
+  font-size:.74rem;font-weight:600;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;
+}
+.adm-signout-btn:hover{background:rgba(239,68,68,.14)}
+.adm-connected{
+  background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);
+  border-radius:8px;padding:8px 12px;margin-bottom:14px;
+  display:flex;align-items:center;gap:7px;font-size:.72rem;color:#059669;font-weight:600;
+}
+.adm-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.adm-stat-card{background:var(--offwhite);border-radius:11px;padding:12px;text-align:center;border:1px solid var(--border)}
+.adm-stat-num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold)}
+.adm-stat-lbl{color:var(--gray2);font-size:.63rem;margin-top:2px}
+.adm-add-btn{
+  width:100%;padding:12px;margin-bottom:14px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.88rem;font-weight:700;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:.2s;box-shadow:0 4px 14px rgba(201,168,76,.3);
+}
+.adm-add-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,168,76,.4)}
+.adm-list-label{font-size:.7rem;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.5px}
+.adm-list-label i{color:var(--gold)}
+.adm-prop-list{display:flex;flex-direction:column;gap:9px;max-height:300px;overflow-y:auto}
+.adm-prop-item{
+  display:flex;gap:10px;align-items:center;
+  background:var(--offwhite);border-radius:10px;padding:10px;border:1px solid var(--border);
+}
+.adm-prop-thumb{width:50px;height:50px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.adm-prop-info{flex:1;min-width:0}
+.adm-prop-name{font-weight:700;font-size:.8rem;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-prop-loc{font-size:.68rem;color:var(--gray2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.adm-prop-price{font-size:.72rem;color:var(--gold);font-weight:700;margin-top:2px}
+.adm-src-badge{font-size:.6rem;padding:2px 6px;border-radius:4px;display:inline-flex;align-items:center;gap:3px;margin-top:3px}
+.adm-src-badge.firebase{background:rgba(251,146,60,.12);color:#ea580c}
+.adm-src-badge.static{background:rgba(99,102,241,.1);color:#6366f1}
+.adm-del-btn{
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);
+  border-radius:7px;width:30px;height:30px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:#dc2626;font-size:.72rem;transition:.2s;
+}
+.adm-del-btn:hover{background:rgba(239,68,68,.18)}
+.adm-lock-btn{
+  background:var(--offwhite);border:1px solid var(--border);
+  border-radius:7px;width:30px;height:30px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gray);font-size:.7rem;cursor:default;
+}
+/* Add form */
+.adm-form-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.adm-form-title i{color:var(--gold)}
+.adm-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.adm-form-grp{margin-bottom:11px}
+.adm-form-lbl{font-size:.7rem;font-weight:700;color:var(--navy);margin-bottom:5px;display:flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.4px}
+.adm-form-lbl i{color:var(--gold);font-size:.68rem}
+.adm-form-lbl .req{color:var(--red)}
+.adm-inp-plain{
+  width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;
+  font-size:.82rem;color:var(--navy);background:#fff;transition:.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.adm-inp-plain:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.08);outline:none}
+.adm-select{
+  width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;
+  font-size:.82rem;color:var(--navy);background:#fff;font-family:'DM Sans',sans-serif;cursor:pointer;
+}
+.adm-select:focus{border-color:var(--gold);outline:none}
+.adm-img-preview{display:none;margin-top:8px;border-radius:9px;overflow:hidden;height:120px}
+.adm-img-preview img{width:100%;height:100%;object-fit:cover}
+.adm-form-err{
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
+  border-radius:9px;padding:10px 13px;margin-bottom:10px;
+  color:#dc2626;font-size:.74rem;display:none;align-items:center;gap:7px;
+}
+.adm-form-err.show{display:flex}
+.adm-submit-btn{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--navy);font-size:.9rem;font-weight:700;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:.2s;box-shadow:0 4px 14px rgba(201,168,76,.3);margin-top:4px;
+}
+.adm-submit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,168,76,.4)}
+.adm-submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.adm-back-btn{
+  width:100%;padding:11px;margin-top:8px;
+  background:transparent;border:1.5px solid var(--border);
+  color:var(--gray2);font-size:.82rem;font-weight:600;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s;
+}
+.adm-back-btn:hover{border-color:var(--navy);color:var(--navy)}
+</style>
+</head>
+<body>
+
+<!-- ======== NOTIFICATION TOAST ======== -->
+<div class="notif" id="notif"><i class="fa-solid fa-circle-check"></i><span id="notifText"></span></div>
+
+<!-- ======== COMPARE STRIP ======== -->
+<div class="compare-strip" id="compareStrip">
+  <div class="compare-strip-label"><i class="fa-solid fa-scale-balanced"></i> Compare</div>
+  <div class="compare-chips" id="compareChips"></div>
+  <button class="compare-go-btn" onclick="openCompareModal()">
+    <i class="fa-solid fa-arrow-right-arrow-left"></i> Compare Now
+  </button>
+</div>
+
+<!-- ======== HEADER ======== -->
+<header class="header">
+  <div class="header-logo" onclick="scrollToTop()">
+    <div class="logo-icon"><i class="fa-solid fa-house-chimney"></i></div>
+    <div>
+      <div class="logo-name">VJ </div>
+      <div class="logo-tag">PROPERTIES</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="header-btn gold" onclick="openAdminPanel()">
+      <i class="fa-solid fa-shield-halved"></i> Admin
+    </button>
+  </div>
+</header>
+
+<!-- ======== HERO ======== -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="pulse-dot"></span> India's Most Trusted Platform</div>
+    <h1 class="hero-title serif">Premium Real Estate<br>in <em>Mumbai</em></h1>
+    <p class="hero-sub">Buy. Sell. Rent. — No Brokerage. No Hidden Charges.</p>
+
+    <!-- Property type tabs -->
+    <div class="prop-tabs" id="propTabs">
+      <button class="prop-tab active" data-type="all" onclick="selectPropTab(this)">
+        <div class="prop-tab-icon"><i class="fa-solid fa-building"></i></div><span>Residential<br>Properties</span>
+      </button>
+      <button class="prop-tab" data-type="commercial" onclick="selectPropTab(this)">
+        <div class="prop-tab-icon"><i class="fa-solid fa-store"></i></div><span>Commercial<br>Properties</span>
+      </button>
+      <button class="prop-tab" data-type="construction" onclick="selectPropTab(this)">
+        <div class="prop-tab-icon"><i class="fa-solid fa-helmet-safety"></i></div><span>Under<br>Construction</span>
+      </button>
+      <button class="prop-tab" data-type="plot" onclick="selectPropTab(this)">
+        <div class="prop-tab-icon"><i class="fa-solid fa-tree"></i></div><span>Plots &amp;<br>Land</span>
+      </button>
+    </div>
+
+    <!-- Search box -->
+    <div class="search-box">
+      <div class="search-row1">
+        <div class="city-btn" id="cityBtn" onclick="toggleCityDropdown()">
+          <i class="fa-solid fa-location-dot"></i>
+          <span id="cityLabel">Mumbai</span>
+          <i class="fa-solid fa-chevron-down" style="font-size:.65rem"></i>
+          <div class="city-dropdown" id="cityDropdown">
+            <div class="city-option" onclick="selectCity(event,'Mumbai')">Mumbai</div>
+            <div class="city-option" onclick="selectCity(event,'Pune')">Pune</div>
+            <div class="city-option" onclick="selectCity(event,'Thane')">Thane</div>
+            <div class="city-option" onclick="selectCity(event,'Navi Mumbai')">Navi Mumbai</div>
+            <div class="city-option" onclick="selectCity(event,'Delhi NCR')">Delhi NCR</div>
+            <div class="city-option" onclick="selectCity(event,'Bangalore')">Bangalore</div>
+            <div class="city-option" onclick="selectCity(event,'Hyderabad')">Hyderabad</div>
+            <div class="city-option" onclick="selectCity(event,'Chennai')">Chennai</div>
+          </div>
+        </div>
+        <div class="search-input-wrap">
+          <input class="search-input" id="heroSearchInput" placeholder="Search location, project, builder..." autocomplete="off"
+            oninput="liveSearchSuggest(this.value)"
+            onkeydown="if(event.key==='Enter')runSearch()"/>
+          <button class="search-icon-btn" onclick="runSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+      </div>
+      <div class="search-filters">
+        <select class="filter-select" id="filterBHK">
+          <option value="">BHK Type</option>
+          <option value="1">1 BHK</option>
+          <option value="2">2 BHK</option>
+          <option value="3">3 BHK</option>
+          <option value="4">4+ BHK</option>
+        </select>
+        <select class="filter-select" id="filterBudget">
+          <option value="">Budget</option>
+          <option value="under50">Under ₹50L</option>
+          <option value="50to1cr">₹50L – ₹1Cr</option>
+          <option value="1to3cr">₹1Cr – ₹3Cr</option>
+          <option value="3to5cr">₹3Cr – ₹5Cr</option>
+          <option value="above5cr">Above ₹5Cr</option>
+        </select>
+        <button class="search-go-btn" onclick="runSearch()">
+          <i class="fa-solid fa-magnifying-glass"></i> Search
+        </button>
+      </div>
+    </div>
+
+    <!-- Location chips -->
+    <div class="loc-chips">
+      <div class="loc-chip" onclick="quickSearch('Navi Mumbai')"><i class="fa-solid fa-location-dot"></i>Navi Mumbai</div>
+      <div class="loc-chip" onclick="quickSearch('Thane')"><i class="fa-solid fa-location-dot"></i>Thane</div>
+      <div class="loc-chip" onclick="quickSearch('Central Mumbai')"><i class="fa-solid fa-location-dot"></i>Central Mumbai</div>
+      <div class="loc-chip" onclick="quickSearch('Bandra')"><i class="fa-solid fa-location-dot"></i>Bandra</div>
+      <div class="loc-chip" onclick="quickSearch('Powai')"><i class="fa-solid fa-location-dot"></i>Powai</div>
+      <div class="loc-chip" onclick="quickSearch('Juhu')"><i class="fa-solid fa-location-dot"></i>Juhu</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== STATS STRIP ======== -->
+<div class="stats-strip">
+  <div class="stat-cell"><div class="stat-num">50K+</div><div class="stat-lbl">Properties</div></div>
+  <div class="stat-cell"><div class="stat-num">120+</div><div class="stat-lbl">Cities</div></div>
+  <div class="stat-cell"><div class="stat-num">₹8000Cr</div><div class="stat-lbl">Deals Done</div></div>
+  <div class="stat-cell"><div class="stat-num">98%</div><div class="stat-lbl">Satisfied</div></div>
+  <div class="stat-cell"><div class="stat-num">0%</div><div class="stat-lbl">Brokerage</div></div>
+</div>
+
+<!-- ======== UPCOMING LAUNCHES ======== -->
+<section class="section" style="background:#fff">
+  <div class="section-head">
+    <div class="section-tag"><i class="fa-solid fa-fire"></i> Hot Right Now</div>
+    <div class="section-row">
+      <h2 class="section-title serif">Upcoming New <em>Launches</em></h2>
+      <button class="view-all" onclick="showAllSection('launches')"><i class="fa-solid fa-arrow-right"></i> View All</button>
+    </div>
+    <div class="section-sub">Pre-launch prices — book now before they rise</div>
+  </div>
+  <div class="cards-scroll" id="launchesScroll">
+    <!-- Cards rendered by JS -->
+  </div>
+</section>
+
+<!-- ======== DISCOUNT BANNER ======== -->
+<div class="discount-banner">
+  <div class="discount-banner-tag"><i class="fa-solid fa-tag"></i> This Week's Special</div>
+  <div class="discount-banner-title">Discover Handpicked<br>Discounted Properties</div>
+  <div class="discount-banner-sub">Curated deals across major Mumbai micro-markets — verified, RERA-compliant, best prices.</div>
+  <button class="discount-banner-btn" onclick="quickSearch('discounted')">
+    <i class="fa-solid fa-percent"></i> Explore Deals
+  </button>
+</div>
+
+<!-- ======== RECENTLY LAUNCHED ======== -->
+<section class="section" style="background:#fff;margin-top:0">
+  <div class="section-head">
+    <div class="section-tag"><i class="fa-solid fa-star"></i> Fresh Listings</div>
+    <div class="section-row">
+      <h2 class="section-title serif">Recently <em>Launched</em></h2>
+      <button class="view-all" onclick="showAllSection('recent')"><i class="fa-solid fa-arrow-right"></i> View All</button>
+    </div>
+  </div>
+  <div class="cards-scroll" id="recentScroll"></div>
+</section>
+
+<!-- ======== TOP SELLING ======== -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-tag"><i class="fa-solid fa-chart-line"></i> High Demand</div>
+    <div class="section-row">
+      <h2 class="section-title serif">Top <em>Selling</em> Projects</h2>
+      <button class="view-all" onclick="showAllSection('topSelling')"><i class="fa-solid fa-arrow-right"></i> View All</button>
+    </div>
+    <div class="section-sub">In high demand — book fast</div>
+  </div>
+  <div class="cards-scroll" id="topSellingScroll"></div>
+</section>
+
+<!-- ======== TOP BUILDERS ======== -->
+<section class="section" style="background:#fff">
+  <div class="section-head">
+    <div class="section-tag"><i class="fa-solid fa-award"></i> Trusted Partners</div>
+    <div class="section-row">
+      <h2 class="section-title serif">Top <em>Builders</em> in Mumbai</h2>
+      <button class="view-all" onclick="showNotif('Loading all builders...','info')"><i class="fa-solid fa-arrow-right"></i> View All</button>
+    </div>
+    <div class="section-sub">Most credible developers in Mumbai</div>
+  </div>
+  <div class="builders-scroll" id="buildersScroll"></div>
+</section>
+
+<!-- ======== TESTIMONIALS ======== -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-tag"><i class="fa-solid fa-comments"></i> Reviews</div>
+    <h2 class="section-title serif">Meet Our <em>Customers</em></h2>
+    <div class="section-sub">Overwhelming words by them</div>
+  </div>
+  <div class="testi-scroll" id="testiScroll"></div>
+</section>
+
+<!-- ======== RECENT ARTICLES ======== -->
+<section class="section" style="background:#fff">
+  <div class="section-head">
+    <div class="section-tag"><i class="fa-solid fa-newspaper"></i> Insights</div>
+    <div class="section-row">
+      <h2 class="section-title serif">Recent <em>Articles</em></h2>
+      <button class="view-all" onclick="showNotif('Opening blog...','info')"><i class="fa-solid fa-arrow-right"></i> View All</button>
+    </div>
+  </div>
+  <div class="articles-scroll" id="articlesScroll"></div>
+</section>
+
+<!-- ======== FOOTER ======== -->
+<footer class="footer">
+  <div id="footerAccordion"></div>
+  <div class="footer-about">
+    We at <strong>VJ PROPERTIES</strong> assist home buyers in negotiating with developers, act on behalf of our customers, and ensure you receive the best deal in the market. We are recognised as the <strong>"Leading Property Advisors in India"</strong> for several consecutive years — with <strong>0% brokerage</strong> and complete end-to-end support.
+  </div>
+  <div class="footer-socials">
+    <a class="footer-social" href="https://facebook.com" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a class="footer-social" href="https://instagram.com" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a class="footer-social" href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+    <a class="footer-social" href="https://twitter.com" target="_blank" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+    <a class="footer-social" href="https://youtube.com" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+  </div>
+  <div class="footer-copy">
+    &copy; 2025 VJ PROPERTIES Pvt. Ltd. All Rights Reserved.
+    <div class="footer-badges">
+      <span class="footer-badge">RERA CERTIFIED</span>
+      <span class="footer-badge">ISO 27001</span>
+      <span class="footer-badge">0% BROKERAGE</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ======== BOTTOM NAV ======== -->
+<nav class="bottom-nav">
+  <div class="bn-item active" id="bnHome" onclick="goHome()">
+    <i class="fa-solid fa-house"></i>Home
+  </div>
+  <div class="bn-item" onclick="openSearchResults('')">
+    <i class="fa-solid fa-magnifying-glass"></i>Search
+  </div>
+
+  <div class="bn-item" onclick="openWishlistPanel()">
+    <div class="bn-badge-wrap">
+      <i class="fa-solid fa-heart"></i>
+      <div class="wish-count" id="wishCount">0</div>
+    </div>
+    Shortlist
+  </div>
+  <div class="bn-item" onclick="openProfileModal()">
+    <i class="fa-solid fa-user"></i>Account
+  </div>
+</nav>
+
+<!-- ======== PROPERTY DETAIL PAGE ======== -->
+<div class="detail-page" id="detailPage">
+  <div class="detail-header">
+    <button class="d-back" onclick="closeDetail()"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="d-header-title" id="dHeaderTitle">Property Details</div>
+    <div class="d-header-actions">
+      <button class="d-action" id="dWishBtn" onclick="toggleDetailWish()" title="Save"><i class="fa-regular fa-heart"></i></button>
+      <button class="d-action" onclick="shareProperty()" title="Share"><i class="fa-solid fa-share-nodes"></i></button>
+      <button class="d-action" onclick="addToCompareFromDetail()" title="Compare"><i class="fa-solid fa-scale-balanced"></i></button>
+    </div>
+  </div>
+
+  <div class="d-hero">
+    <img id="dImg" src="" alt="Property"/>
+    <div class="d-hero-badge" id="dBadge">RERA Verified</div>
+    <div class="d-hero-rating"><i class="fa-solid fa-star"></i> <span id="dRating">4.8</span> Rating</div>
+    <div class="d-photos-count" onclick="showNotif('Gallery opening...','info')"><i class="fa-solid fa-images"></i> <span id="dPhotos">24</span> Photos</div>
+  </div>
+
+  <div class="media-tabs">
+    <div class="m-tab active" onclick="selectMediaTab(this,'Video')"><i class="fa-solid fa-play"></i><span>Video</span></div>
+    <div class="m-tab" onclick="selectMediaTab(this,'Street')"><i class="fa-solid fa-street-view"></i><span>Street</span></div>
+    <div class="m-tab" onclick="selectMediaTab(this,'Floor Plans')"><i class="fa-solid fa-ruler-combined"></i><span>Floor Plans</span></div>
+    <div class="m-tab" onclick="selectMediaTab(this,'Amenities')"><i class="fa-solid fa-swimmer"></i><span>Amenities</span></div>
+    <div class="m-tab" onclick="selectMediaTab(this,'Gallery')"><i class="fa-solid fa-camera"></i><span>Gallery</span></div>
+  </div>
+
+  <div class="d-body" id="dBody">
+    <!-- Fully populated by openDetail() -->
+  </div>
+
+  <div class="detail-cta visible">
+    <button class="d-cta-btn quote" onclick="toggleDetailWish()"><i class="fa-solid fa-heart"></i> Wishlist</button>
+    <a class="d-cta-btn visit" href="https://wa.link/m8rfnz" target="_blank"><i class="fa-brands fa-whatsapp"></i> Contact Us</a>
+  </div>
+</div>
+
+<!-- ======== BOOKING MODAL ======== -->
+<div class="modal-overlay" id="bookingModal" onclick="closeModalOutside(event)">
+  <div class="booking-sheet">
+    <div class="sheet-handle"></div>
+    <div id="bookingFormWrap">
+      <div class="booking-title">Arrange a Site Visit</div>
+      <div class="booking-sub">Fill in your details and select a convenient slot</div>
+
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:0">
+          <div class="form-label"><i class="fa-solid fa-user"></i> First Name *</div>
+          <input class="form-input" id="bkFirstName" type="text" placeholder="Aditya"/>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <div class="form-label"><i class="fa-solid fa-user"></i> Last Name *</div>
+          <input class="form-input" id="bkLastName" type="text" placeholder="Kumar"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label"><i class="fa-solid fa-envelope"></i> Email Address *</div>
+        <input class="form-input" id="bkEmail" type="email" placeholder="you@email.com"/>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label"><i class="fa-solid fa-phone"></i> Mobile Number *</div>
+        <input class="form-input" id="bkPhone" type="tel" placeholder="+91 98765 43210" maxlength="15"/>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label"><i class="fa-solid fa-calendar"></i> Preferred Date *</div>
+        <div class="booking-dates" id="bookingDates"></div>
+      </div>
+
+      <div class="slots-label"><i class="fa-regular fa-clock"></i> Preferred Time Slot *</div>
+      <div class="slots-grid">
+        <div class="slot" onclick="selectSlot(this)"><i class="fa-regular fa-sun"></i> 10:00 AM</div>
+        <div class="slot" onclick="selectSlot(this)"><i class="fa-regular fa-sun"></i> 11:00 AM</div>
+        <div class="slot" onclick="selectSlot(this)"><i class="fa-solid fa-sun"></i> 12:00 PM</div>
+        <div class="slot" onclick="selectSlot(this)"><i class="fa-solid fa-cloud-sun"></i> 2:00 PM</div>
+        <div class="slot" onclick="selectSlot(this)"><i class="fa-solid fa-cloud-sun"></i> 3:30 PM</div>
+        <div class="slot" onclick="selectSlot(this)"><i class="fa-solid fa-moon"></i> 5:00 PM</div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label"><i class="fa-solid fa-comment"></i> Message (Optional)</div>
+        <textarea class="form-input" id="bkMessage" rows="2" placeholder="Any specific requirements or questions..." style="resize:none"></textarea>
+      </div>
+
+      <div class="emailjs-note">
+        <strong><i class="fa-solid fa-circle-info"></i> EmailJS Setup Required:</strong><br>
+        Replace <strong>YOUR_SERVICE_ID</strong>, <strong>YOUR_TEMPLATE_ID</strong>, and <strong>YOUR_PUBLIC_KEY</strong> in the script at the bottom to activate email notifications. Get your free keys at <strong>emailjs.com</strong>
+      </div>
+
+      <button class="booking-confirm-btn" id="bookingConfirmBtn" onclick="submitBooking()">
+        <i class="fa-solid fa-calendar-check"></i> Confirm Site Visit
+      </button>
+      <button class="booking-cancel-btn" onclick="closeBookingModal()">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </button>
+    </div>
+
+    <!-- Success screen -->
+    <div class="booking-success" id="bookingSuccess">
+      <div class="success-icon-wrap"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="success-title">Visit Confirmed!</div>
+      <div class="success-sub">Your booking has been submitted. A confirmation email has been sent and our team will contact you shortly.</div>
+      <div class="booking-ref-box" id="bookingRefBox"></div>
+      <button class="success-close-btn" onclick="closeBookingModal()">
+        <i class="fa-solid fa-house"></i> Back to Listings
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ======== SEARCH RESULTS OVERLAY ======== -->
+<div class="search-results-overlay" id="searchOverlay">
+  <div class="search-results-header">
+    <button class="search-results-back" onclick="closeSearchOverlay()"><i class="fa-solid fa-arrow-left"></i></button>
+    <div>
+      <div class="search-results-title" id="searchResultTitle">Search Results</div>
+      <div style="font-size:.68rem;color:var(--gray2)" id="searchResultSub"></div>
+    </div>
+    <div class="search-results-count" id="searchResultCount"></div>
+  </div>
+  <div style="padding:12px 16px;background:#fff;border-bottom:1px solid var(--light)">
+    <div style="position:relative">
+      <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:.85rem"></i>
+      <input class="form-input" id="searchOverlayInput" placeholder="Refine search..."
+        style="padding-left:36px;border-color:var(--border)"
+        oninput="filterSearchResults(this.value)"
+        onkeydown="if(event.key==='Enter')filterSearchResults(this.value)"/>
+    </div>
+  </div>
+  <div class="search-results-body">
+    <div class="search-filters-bar" id="searchFilterBar"></div>
+    <div class="search-results-grid" id="searchResultsGrid"></div>
+    <div style="text-align:center;padding:40px 20px;display:none" id="searchNoResults">
+      <i class="fa-solid fa-magnifying-glass" style="font-size:2.5rem;color:var(--border);display:block;margin-bottom:12px"></i>
+      <p style="color:var(--gray2);font-size:.85rem">No properties found for your search.<br>Try different keywords or filters.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ======== WISHLIST PANEL ======== -->
+<div class="wishlist-panel" id="wishlistPanel" onclick="closeWishlistOutside(event)">
+  <div class="wishlist-sheet">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 class="serif" style="font-size:1.3rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:7px">
+        <i class="fa-solid fa-heart" style="color:var(--red)"></i> My Shortlist
+        <span style="background:var(--red);color:#fff;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:50px;font-family:'DM Sans',sans-serif" id="wishlistCountBadge">0</span>
+      </h3>
+      <button onclick="closeWishlistPanel()" style="background:var(--offwhite);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray2)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="wishlistContent"></div>
+  </div>
+</div>
+
+<!-- ======== COMPARE MODAL ======== -->
+<div class="compare-modal" id="compareModal">
+  <div class="compare-sheet">
+    <div class="compare-header">
+      <h3 class="serif"><i class="fa-solid fa-scale-balanced"></i> Compare Properties</h3>
+      <button class="compare-close" onclick="closeCompareModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="compareContent"></div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="profileModal" onclick="if(event.target===this)document.getElementById('profileModal').classList.remove('open')">
+  <div class="booking-sheet">
+    <div class="sheet-handle"></div>
+    <div style="text-align:center;padding:10px 0 18px">
+      <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1.6rem;color:var(--navy)"><i class="fa-solid fa-user"></i></div>
+      <div class="booking-title">My Account</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <button onclick="showNotif('Opening saved searches...','info');document.getElementById('profileModal').classList.remove('open')" style="padding:14px;background:var(--offwhite);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <i class="fa-solid fa-magnifying-glass" style="color:var(--gold);font-size:1.3rem"></i>
+        <span style="font-size:.78rem;font-weight:600;color:var(--navy)">Saved Searches</span>
+      </button>
+      <button onclick="openWishlistPanel();document.getElementById('profileModal').classList.remove('open')" style="padding:14px;background:var(--offwhite);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <i class="fa-solid fa-heart" style="color:var(--red);font-size:1.3rem"></i>
+        <span style="font-size:.78rem;font-weight:600;color:var(--navy)">Shortlist</span>
+      </button>
+      <button onclick="showNotif('Opening visit history...','info');document.getElementById('profileModal').classList.remove('open')" style="padding:14px;background:var(--offwhite);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <i class="fa-solid fa-calendar-check" style="color:var(--green);font-size:1.3rem"></i>
+        <span style="font-size:.78rem;font-weight:600;color:var(--navy)">My Visits</span>
+      </button>
+      <button onclick="showNotif('Opening settings...','info');document.getElementById('profileModal').classList.remove('open')" style="padding:14px;background:var(--offwhite);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <i class="fa-solid fa-gear" style="color:var(--gray);font-size:1.3rem"></i>
+        <span style="font-size:.78rem;font-weight:600;color:var(--navy)">Settings</span>
+      </button>
+    </div>
+    <button class="booking-cancel-btn" onclick="document.getElementById('profileModal').classList.remove('open')"><i class="fa-solid fa-xmark"></i> Close</button>
+  </div>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+// ============================================================
+// EMAILJS CONFIGURATION
+// Replace with your actual EmailJS credentials from emailjs.com
+// ============================================================
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'AbCdEfGhIjKlMnOp'
+
+(function(){
+  try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
+})();
+
+// ============================================================
+// DATA
+// ============================================================
+let ALL_PROPS = [
+  { id:0, name:'Azure Sky Residences',  loc:'Bandra West, Mumbai',   price:'₹3.2 Cr – ₹5.8 Cr', priceNum:3.2, bhk:'2, 3, 4 BHK', area:'1,200 to 2,400 SqFt', img:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80', badge:'Pre-Launch',    badgeClass:'',        rating:4.8, status:'Pre-Launch',           section:['launches','all'], source:'static' },
+  { id:1, name:'The Monarch Tower',     loc:'Powai, Mumbai',          price:'₹1.8 Cr – ₹3.2 Cr', priceNum:1.8, bhk:'2, 3 BHK',    area:'900 to 1,500 SqFt',   img:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80', badge:'RERA Verified', badgeClass:'',        rating:4.6, status:'Ready to Move',        section:['launches','recent','all'], source:'static' },
+  { id:2, name:'Golden Gate Villa',     loc:'Juhu, Mumbai',           price:'₹9.5 Cr – ₹14 Cr',  priceNum:9.5, bhk:'4, 5 BHK',    area:'3,200 to 5,000 SqFt', img:'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600&q=80', badge:'Luxury',        badgeClass:'badge-purple', rating:4.9, status:'Ready to Move',     section:['launches','topSelling','all'], source:'static' },
+  { id:3, name:'Pearl Residency',       loc:'Navi Mumbai',            price:'₹75 L – ₹1.2 Cr',   priceNum:0.75,bhk:'1, 2 BHK',    area:'560 to 980 SqFt',     img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80', badge:'Best Value',    badgeClass:'',        rating:4.3, status:'Under Construction',   section:['recent','all'], source:'static' },
+  { id:4, name:'Serenity Heights',      loc:'Thane West',             price:'₹1.2 Cr – ₹2.1 Cr', priceNum:1.2, bhk:'2, 3 BHK',    area:'850 to 1,400 SqFt',   img:'https://images.unsplash.com/photo-1567496898669-ee935f5f647a?w=600&q=80', badge:'New Launch',    badgeClass:'badge-green', rating:4.5, status:'New Launch',        section:['launches','recent','all'], source:'static' },
+  { id:5, name:'Emerald Court',         loc:'Andheri East, Mumbai',   price:'₹2.4 Cr – ₹3.8 Cr', priceNum:2.4, bhk:'2, 3 BHK',    area:'1,100 to 1,800 SqFt', img:'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80', badge:'RERA Verified', badgeClass:'',        rating:4.7, status:'Ready to Move',        section:['recent','topSelling','all'], source:'static' },
+  { id:6, name:'Sapphire Gardens',      loc:'Mulund West, Mumbai',    price:'₹1.05 Cr – ₹1.9 Cr',priceNum:1.05,bhk:'1, 2 BHK',    area:'620 to 1,050 SqFt',   img:'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600&q=80', badge:'Trending',      badgeClass:'',        rating:4.4, status:'Under Construction',   section:['recent','all'], source:'static' },
+  { id:7, name:'Lodha Amara',           loc:'Kolshet Road, Thane',    price:'₹84.99 L – ₹1.39 Cr',priceNum:0.85,bhk:'1, 2, 3 BHK', area:'446 to 955 SqFt',    img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80', badge:'RERA Verified', badgeClass:'',        rating:4.9, status:'Ready to Move',        section:['topSelling','all'], source:'static' },
+  { id:8, name:'Piramal Vaikunth',      loc:'Balkum, Thane',          price:'₹1.09 Cr – ₹2.4 Cr',priceNum:1.09,bhk:'2 BHK',       area:'700 to 1,200 SqFt',   img:'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=600&q=80', badge:'Premium',       badgeClass:'',        rating:4.7, status:'Ready to Move',        section:['topSelling','all'], source:'static' },
+  { id:9, name:'Runwal Woods',          loc:'Dombivali, Mumbai',      price:'₹95 L – ₹1.6 Cr',   priceNum:0.95,bhk:'2, 3 BHK',    area:'780 to 1,300 SqFt',   img:'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=600&q=80', badge:'New Launch',    badgeClass:'badge-green', rating:4.6, status:'Under Construction', section:['topSelling','all'], source:'static' },
+];
+
+const BUILDERS_DATA = [
+  { name:'Lodha Group',       rating:5.0, projects:48, img:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80' },
+  { name:'Godrej Properties', rating:4.8, projects:32, img:'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=300&q=80' },
+  { name:'Oberoi Realty',     rating:4.9, projects:19, img:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=300&q=80' },
+  { name:'Hiranandani',       rating:4.6, projects:27, img:'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=300&q=80' },
+  { name:'Godrej Properties', rating:4.7, projects:22, img:'https://images.unsplash.com/photo-1560185127-6a6b2a5f4291?w=300&q=80' },
+];
+
+const TESTI_DATA = [
+  { name:'Kaushik Datta', role:'IT Professional', rating:4.5, img:'https://randomuser.me/api/portraits/men/41.jpg', text:'VJ PROPERTIES understood our needs and helped us finalise the perfect home in a short span. With their support, we made the right buying decision at the right time.' },
+  { name:'Sunita Desai',  role:'Business Owner',   rating:5,   img:'https://randomuser.me/api/portraits/women/35.jpg', text:'Found our villa within a week! Verified listings gave us complete confidence. Truly a premium experience from the first call to final registration.' },
+  { name:'Rohit Nair',    role:'NRI Investor',     rating:5,   img:'https://randomuser.me/api/portraits/men/62.jpg', text:'As an NRI buyer I was nervous, but VJ PROPERTIES handled everything end-to-end. The virtual tours and documentation were absolutely seamless.' },
+  { name:'Meera Joshi',   role:'Teacher',          rating:4.5, img:'https://randomuser.me/api/portraits/women/22.jpg', text:'The 0% brokerage promise is real! They saved us ₹4 lakhs. Team was helpful throughout and helped us negotiate the best deal with the builder.' },
+];
+
+const ARTICLES_DATA = [
+  { region:'Navi Mumbai', author:'Shruti Bagwe', title:'How Will The Navi Mumbai Metro Route Impact Real Estate Prices?', img:'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400&q=80' },
+  { region:'Mumbai',      author:'Ravi Mehta',   title:'Stamp Duty Charges in Maharashtra — What Buyers Must Know in 2025', img:'https://images.unsplash.com/photo-1553545985-1e0d8781d5db?w=400&q=80' },
+  { region:'Thane',       author:'Priya Rao',    title:'Top 5 Reasons Thane Is Mumbai\'s Fastest Growing Real Estate Hub', img:'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&q=80' },
+  { region:'Mumbai',      author:'Ankit Shah',   title:'RERA 2024: New Rules Every Property Buyer Must Know', img:'https://images.unsplash.com/photo-1560185127-6a6b2a5f4291?w=400&q=80' },
+];
+
+const FOOTER_SECTIONS = [
+  { title:'Popular Localities in India', links:['Bandra West','Powai','Juhu','Worli','Thane West','Navi Mumbai','Andheri East','Mulund','Chembur','Kharghar'] },
+  { title:'Properties in India',         links:['2 BHK in Mumbai','3 BHK in Pune','1 BHK in Thane','Villas in Goa','Plots in Hyderabad','Studios in Bangalore'] },
+  { title:'Commercial Projects in India', links:['Offices in BKC','Shops in Dadar','Warehouses in Bhiwandi','IT Parks in Pune','Retail Spaces in Thane'] },
+  { title:'New Projects in India',        links:['New in Mumbai','New in Pune','New in Bangalore','New in Delhi','New in Hyderabad'] },
+  { title:'Top Cities In India',          links:['Mumbai','Pune','Bangalore','Hyderabad','Delhi NCR','Chennai','Kolkata','Ahmedabad'] },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let wishlist    = new Set();
+let compareArr  = [];
+let currentProp = 0;
+let selDate     = '';
+let selSlot     = '';
+let allSearchData = [...ALL_PROPS];
+
+// ============================================================
+// RENDER HELPERS
+// ============================================================
+function stars(n) {
+  let s = '';
+  for(let i=1;i<=5;i++) s += `<i class="fa-${i<=Math.floor(n)?'solid':'regular'} fa-star"></i>`;
+  return s;
+}
+
+function propCardHTML(p) {
+  const wished = wishlist.has(String(p.id));
+  const inComp = compareArr.find(x=>x.id===p.id);
+  const sid = `'${p.id}'`;
+  return `
+  <div class="prop-card" onclick="openDetail(${sid})">
+    <div class="prop-card-img">
+      <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+      <span class="prop-card-badge ${p.badgeClass}">${p.badge}</span>
+      <button class="prop-card-wish ${wished?'active':''}" onclick="event.stopPropagation();toggleWish(${sid},this)" title="Save">
+        <i class="fa-${wished?'solid':'regular'} fa-heart"></i>
+      </button>
+      <div class="prop-card-rating"><i class="fa-solid fa-star"></i> ${p.rating}</div>
+    </div>
+    <div class="prop-card-body">
+      <div class="prop-card-name">${p.name}</div>
+      <div class="prop-card-loc"><i class="fa-solid fa-location-dot"></i>${p.loc}</div>
+      <div class="prop-card-price">${p.price}</div>
+      <div class="prop-card-config"><i class="fa-solid fa-bed" style="font-size:.65rem;color:var(--gold)"></i> ${p.bhk}</div>
+      <div class="prop-card-area"><i class="fa-solid fa-expand"></i> ${p.area}</div>
+      <div class="prop-card-footer">
+        <span class="prop-card-status">${p.status}</span>
+        <div class="prop-card-actions">
+          <button class="prop-card-compare ${inComp?'active':''}" onclick="event.stopPropagation();toggleCompare(${sid})" title="Compare">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </button>
+          <button class="prop-card-cta" onclick="event.stopPropagation();openDetail(${sid})">
+            <i class="fa-solid fa-eye"></i> View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSection(containerId, section) {
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  const filtered = section==='all'
+    ? ALL_PROPS
+    : ALL_PROPS.filter(p => {
+        if (!p.section) return false;
+        // Support both array and string
+        const sec = Array.isArray(p.section) ? p.section : [p.section];
+        return sec.includes(section) || sec.includes('all');
+      });
+  el.innerHTML = filtered.map(propCardHTML).join('');
+}
+
+function renderBuilders() {
+  const el = document.getElementById('buildersScroll');
+  if(!el) return;
+  el.innerHTML = BUILDERS_DATA.map(b=>`
+    <div class="builder-card" onclick="showNotif('Loading ${b.name} projects...','info')">
+      <div class="builder-img"><img src="${b.img}" alt="${b.name}" loading="lazy"/></div>
+      <div class="builder-body">
+        <div class="builder-name">${b.name}</div>
+        <div class="builder-stars">${stars(b.rating)}<span class="builder-rating-text">${b.rating}</span></div>
+        <div class="builder-projects"><i class="fa-solid fa-building"></i> ${b.projects} Active Projects</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderTestimonials() {
+  const el = document.getElementById('testiScroll');
+  if(!el) return;
+  el.innerHTML = TESTI_DATA.map(t=>`
+    <div class="testi-card">
+      <div class="testi-quote-box"><i class="fa-solid fa-quote-left"></i></div>
+      <div class="testi-content">
+        <div class="testi-accent"></div>
+        <div class="testi-text">${t.text}</div>
+      </div>
+      <div class="testi-author">
+        <img class="testi-img" src="${t.img}" alt="${t.name}" loading="lazy"/>
+        <div>
+          <div class="testi-name">${t.name}</div>
+          <div class="testi-stars-row">${stars(t.rating)}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderArticles() {
+  const el = document.getElementById('articlesScroll');
+  if(!el) return;
+  el.innerHTML = ARTICLES_DATA.map(a=>`
+    <div class="article-card" onclick="showNotif('Opening article...','info')">
+      <div class="article-img">
+        <img src="${a.img}" alt="${a.title}" loading="lazy"/>
+        <div class="article-region">${a.region}</div>
+        <div class="article-author"><i class="fa-solid fa-user"></i> By ${a.author}</div>
+      </div>
+      <div class="article-body"><div class="article-title">${a.title}</div></div>
+    </div>`).join('');
+}
+
+function renderFooter() {
+  document.getElementById('footerAccordion').innerHTML = FOOTER_SECTIONS.map(s=>`
+    <div class="footer-acc-item">
+      <div class="footer-acc-head" onclick="toggleAcc(this.parentElement)">
+        <span>${s.title}</span>
+        <i class="fa-solid fa-chevron-right footer-acc-arrow"></i>
+      </div>
+      <div class="footer-acc-body">
+        <div class="footer-links-wrap">
+          ${s.links.map(l=>`<span class="footer-link" onclick="quickSearch('${l}')">${l}</span>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// Init render
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderSection('launchesScroll','launches');
+  renderSection('recentScroll','recent');
+  renderSection('topSellingScroll','topSelling');
+  renderBuilders();
+  renderTestimonials();
+  renderArticles();
+  renderFooter();
+  renderBookingDates();
+});
+
+// ============================================================
+// NOTIFICATION
+// ============================================================
+let notifTimer;
+function showNotif(msg, type='success') {
+  const el = document.getElementById('notif');
+  const icon = el.querySelector('i');
+  const txt  = document.getElementById('notifText');
+  icon.className = type==='success' ? 'fa-solid fa-circle-check' : type==='error' ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-circle-info';
+  el.className = `notif ${type}`;
+  txt.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+// ============================================================
+// WISHLIST
+// ============================================================
+function toggleWish(id, btn) {
+  const sid = String(id);
+  if(wishlist.has(sid)) {
+    wishlist.delete(sid);
+    if(btn){ btn.classList.remove('active'); btn.innerHTML='<i class="fa-regular fa-heart"></i>'; }
+    showNotif('Removed from shortlist','info');
+  } else {
+    wishlist.add(sid);
+    if(btn){ btn.classList.add('active'); btn.innerHTML='<i class="fa-solid fa-heart"></i>'; }
+    showNotif('Saved to shortlist','success');
+  }
+  document.getElementById('wishCount').textContent = wishlist.size;
+  syncWishBtns(sid);
+}
+
+function syncWishBtns(id) {
+  const sid = String(id);
+  document.querySelectorAll('.prop-card-wish').forEach(b=>{
+    const onclick = b.getAttribute('onclick') || '';
+    const match = onclick.match(/toggleWish\('?([^',)]+)'?/);
+    if(match && String(match[1])===sid) {
+      b.classList.toggle('active', wishlist.has(sid));
+      b.innerHTML = wishlist.has(sid) ? '<i class="fa-solid fa-heart"></i>' : '<i class="fa-regular fa-heart"></i>';
+    }
+  });
+}
+
+function toggleDetailWish() {
+  const btn = document.getElementById('dWishBtn');
+  toggleWish(currentProp, null);
+  if(wishlist.has(String(currentProp))) {
+    btn.classList.add('wish-active');
+    btn.innerHTML='<i class="fa-solid fa-heart"></i>';
+  } else {
+    btn.classList.remove('wish-active');
+    btn.innerHTML='<i class="fa-regular fa-heart"></i>';
+  }
+}
+
+function openWishlistPanel() {
+  const panel = document.getElementById('wishlistPanel');
+  panel.classList.add('open');
+  renderWishlist();
+}
+function closeWishlistPanel() { document.getElementById('wishlistPanel').classList.remove('open'); }
+function closeWishlistOutside(e) { if(e.target===document.getElementById('wishlistPanel')) closeWishlistPanel(); }
+
+function renderWishlist() {
+  const content = document.getElementById('wishlistContent');
+  const badge = document.getElementById('wishlistCountBadge');
+  badge.textContent = wishlist.size;
+  if(wishlist.size===0) {
+    content.innerHTML=`<div class="wishlist-empty"><i class="fa-solid fa-heart"></i><p>No saved properties yet.<br>Tap the heart icon on any listing.</p></div>`;
+    return;
+  }
+  const props = ALL_PROPS.filter(p=>wishlist.has(p.id));
+  content.innerHTML=`<div class="wishlist-grid">${props.map(p=>`
+    <div class="wish-card" onclick="closeWishlistPanel();openDetail(${p.id})">
+      <div class="wish-card-img"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
+      <div class="wish-card-body">
+        <div class="wish-card-name">${p.name}</div>
+        <div class="wish-card-price">${p.price}</div>
+        <button class="wish-remove" onclick="event.stopPropagation();toggleWish(${p.id},null);renderWishlist()">
+          <i class="fa-solid fa-trash"></i> Remove
+        </button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+// ============================================================
+// COMPARE
+// ============================================================
+function toggleCompare(id) {
+  const prop = ALL_PROPS.find(p => String(p.id) === String(id));
+  const idx  = compareArr.findIndex(p => String(p.id) === String(id));
+  if(idx>-1) {
+    compareArr.splice(idx,1);
+    showNotif('Removed from compare','info');
+  } else if(compareArr.length>=3) {
+    showNotif('Max 3 properties to compare','error'); return;
+  } else {
+    compareArr.push(prop);
+    showNotif('Added to compare','success');
+  }
+  updateCompareStrip();
+  document.querySelectorAll('.prop-card-compare').forEach(btn=>{
+    const oc = btn.getAttribute('onclick')||'';
+    const m  = oc.match(/toggleCompare\((\d+)/);
+    if(m) btn.classList.toggle('active', compareArr.some(p=>p.id===parseInt(m[1])));
+  });
+}
+
+function updateCompareStrip() {
+  const strip = document.getElementById('compareStrip');
+  const chips = document.getElementById('compareChips');
+  if(compareArr.length>0) {
+    strip.classList.add('show');
+    chips.innerHTML = compareArr.map(p=>`
+      <div class="compare-chip-item">
+        <i class="fa-solid fa-building" style="font-size:.65rem;color:var(--gold)"></i>
+        ${p.name.split(' ').slice(0,3).join(' ')}
+        <button class="compare-chip-remove" onclick="toggleCompare(${p.id})"><i class="fa-solid fa-xmark"></i></button>
+      </div>`).join('');
+  } else {
+    strip.classList.remove('show');
+    chips.innerHTML='';
+  }
+}
+
+function openCompareModal() {
+  if(compareArr.length<2){ showNotif('Select at least 2 properties to compare','info'); return; }
+  const modal = document.getElementById('compareModal');
+  const content = document.getElementById('compareContent');
+  modal.classList.add('open');
+  const cols = compareArr.length;
+  const fields = [
+    ['fa-tag','Price'],['fa-location-dot','Location'],
+    ['fa-bed','BHK'],['fa-expand','Area'],
+    ['fa-circle-check','Status'],['fa-star','Rating']
+  ];
+  const vals = p=>[p.price, p.loc, p.bhk, p.area, p.status, p.rating];
+  content.innerHTML=`
+  <div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:14px;overflow-x:auto">
+    ${compareArr.map(p=>`
+    <div class="compare-prop-col">
+      <div class="compare-prop-img"><img src="${p.img}" alt="${p.name}"/></div>
+      <div class="compare-prop-name">${p.name}</div>
+      <div class="compare-rows">
+        ${fields.map((f,i)=>`
+        <div class="compare-row">
+          <div class="compare-row-key"><i class="fa-solid ${f[0]}"></i> ${f[1]}</div>
+          <div class="compare-row-val">${vals(p)[i]}</div>
+        </div>`).join('')}
+      </div>
+      <button class="compare-view-btn" onclick="closeCompareModal();openDetail(${p.id})">
+        <i class="fa-solid fa-eye"></i> View Details
+      </button>
+    </div>`).join('')}
+  </div>`;
+}
+function closeCompareModal() { document.getElementById('compareModal').classList.remove('open'); }
+
+function addToCompareFromDetail() {
+  toggleCompare(currentProp);
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+function runSearch() {
+  const q    = document.getElementById('heroSearchInput').value.trim();
+  const bhk  = document.getElementById('filterBHK').value;
+  const bud  = document.getElementById('filterBudget').value;
+  let results = [...ALL_PROPS];
+
+  if(q) results = results.filter(p=>
+    p.name.toLowerCase().includes(q.toLowerCase()) ||
+    p.loc.toLowerCase().includes(q.toLowerCase()) ||
+    p.bhk.includes(q)
+  );
+  if(bhk) results = results.filter(p=>p.bhk.includes(bhk));
+  if(bud) {
+    const ranges = {under50:[0,0.5],'50to1cr':[0.5,1],'1to3cr':[1,3],'3to5cr':[3,5],above5cr:[5,999]};
+    const [lo,hi] = ranges[bud]||[0,999];
+    results = results.filter(p=>p.priceNum>=lo && p.priceNum<hi);
+  }
+
+  openSearchResults(q||'All Properties', results);
+}
+
+function quickSearch(term) {
+  const q = term.toLowerCase();
+  let results;
+  if(q==='discounted') {
+    results = ALL_PROPS.filter(p=>p.priceNum<2);
+  } else {
+    results = ALL_PROPS.filter(p=>
+      p.name.toLowerCase().includes(q)||
+      p.loc.toLowerCase().includes(q)
+    );
+  }
+  openSearchResults(term, results);
+}
+
+function openSearchResults(query, results) {
+  if(!results) results = ALL_PROPS.filter(p=>
+    !query || p.name.toLowerCase().includes(query.toLowerCase())||
+    p.loc.toLowerCase().includes(query.toLowerCase())
+  );
+  allSearchData = results;
+  const overlay = document.getElementById('searchOverlay');
+  overlay.classList.add('open');
+  document.getElementById('searchResultTitle').textContent = query || 'All Properties';
+  document.getElementById('searchResultSub').textContent = query ? `Showing results for "${query}"` : '';
+  document.getElementById('searchResultCount').textContent = `${results.length} found`;
+  document.getElementById('searchOverlayInput').value = query||'';
+  renderSearchResults(results);
+  renderSearchFilterBar();
+  document.getElementById('bnHome').classList.remove('active');
+}
+
+function closeSearchOverlay() {
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('bnHome').classList.add('active');
+}
+
+function renderSearchFilterBar() {
+  const statuses = ['All','Ready to Move','New Launch','Under Construction','Pre-Launch'];
+  document.getElementById('searchFilterBar').innerHTML = statuses.map((s,i)=>`
+    <div class="s-filter-chip ${i===0?'active':''}" onclick="filterByStatus(this,'${s}')">${s}</div>`).join('');
+}
+
+function filterByStatus(el, status) {
+  document.querySelectorAll('.s-filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  let filtered = status==='All' ? allSearchData : allSearchData.filter(p=>p.status===status);
+  renderSearchResults(filtered);
+  document.getElementById('searchResultCount').textContent = `${filtered.length} found`;
+}
+
+function filterSearchResults(val) {
+  const q = val.toLowerCase().trim();
+  let filtered = q ? allSearchData.filter(p=>
+    p.name.toLowerCase().includes(q)||p.loc.toLowerCase().includes(q)||p.bhk.includes(q)
+  ) : allSearchData;
+  renderSearchResults(filtered);
+  document.getElementById('searchResultCount').textContent = `${filtered.length} found`;
+  document.getElementById('searchNoResults').style.display = filtered.length===0 ? 'block':'none';
+}
+
+function renderSearchResults(data) {
+  const grid = document.getElementById('searchResultsGrid');
+  const noRes = document.getElementById('searchNoResults');
+  if(data.length===0){ grid.innerHTML=''; noRes.style.display='block'; return; }
+  noRes.style.display='none';
+  grid.innerHTML = data.map(p=>{
+    const sid = `'${p.id}'`;
+    return `
+    <div class="search-result-card" onclick="closeSearchOverlay();openDetail(${sid})">
+      <div class="sr-img">
+        <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+        <span class="sr-badge">${p.badge}</span>
+        <button class="sr-wish ${wishlist.has(String(p.id))?'active':''}" onclick="event.stopPropagation();toggleWish(${sid},this)" title="Save">
+          <i class="fa-${wishlist.has(String(p.id))?'solid':'regular'} fa-heart"></i>
+        </button>
+      </div>
+      <div class="sr-body">
+        <div class="sr-name">${p.name}</div>
+        <div class="sr-loc"><i class="fa-solid fa-location-dot"></i>${p.loc}</div>
+        <div class="sr-price">${p.price}</div>
+        <div class="sr-bhk"><i class="fa-solid fa-bed" style="color:var(--gold);font-size:.6rem"></i> ${p.bhk}</div>
+        <div class="sr-footer">
+          <div class="sr-rating"><i class="fa-solid fa-star"></i> ${p.rating}</div>
+          <button class="sr-view" onclick="event.stopPropagation();closeSearchOverlay();openDetail(${sid})">View <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function liveSearchSuggest(val) {
+  // Live feedback in input
+  if(val.length>1) {
+    const matches = ALL_PROPS.filter(p=>
+      p.name.toLowerCase().includes(val.toLowerCase())||
+      p.loc.toLowerCase().includes(val.toLowerCase())
+    );
+    if(matches.length) {
+      document.getElementById('heroSearchInput').style.borderColor = 'rgba(201,168,76,.7)';
+    }
+  }
+}
+
+function showAllSection(section) {
+  const labels = {launches:'New Launches', recent:'Recent Projects', topSelling:'Top Selling Projects', all:'All Properties'};
+  const results = section==='all' ? ALL_PROPS : ALL_PROPS.filter(p=>p.section.includes(section));
+  openSearchResults(labels[section]||section, results);
+}
+
+// ============================================================
+// DETAIL PAGE
+// ============================================================
+function openDetail(id) {
+  currentProp = id;
+  const p = ALL_PROPS.find(x => String(x.id) === String(id));
+  if(!p) return;
+
+  // Header
+  document.getElementById('dHeaderTitle').textContent = p.name;
+  document.getElementById('dImg').src    = p.img;
+  document.getElementById('dBadge').textContent = p.badge;
+  document.getElementById('dRating').textContent = p.rating;
+
+  // Wish button
+  const wb = document.getElementById('dWishBtn');
+  if(wishlist.has(String(id))) { wb.classList.add('wish-active'); wb.innerHTML='<i class="fa-solid fa-heart"></i>'; }
+  else { wb.classList.remove('wish-active'); wb.innerHTML='<i class="fa-regular fa-heart"></i>'; }
+
+  // Static highlights for built-in props
+  const staticHighlights = `
+    <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-shield-halved"></i></div><div class="highlight-text">RERA Registered Project</div></div>
+    <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-water-ladder"></i></div><div class="highlight-text">Olympic Size Swimming Pool</div></div>
+    <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-shield"></i></div><div class="highlight-text">24/7 Gated Security</div></div>
+    <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-leaf"></i></div><div class="highlight-text">15 Acres Green Open Space</div></div>
+    <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-car"></i></div><div class="highlight-text">3-Level Basement Parking</div></div>
+    <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-bolt"></i></div><div class="highlight-text">100% Power Backup</div></div>`;
+
+  // Firebase highlights from property data
+  const fbHighlights = p.highlights
+    ? p.highlights.split('\n').filter(h=>h.trim()).map(h=>`
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-circle-check"></i></div><div class="highlight-text">${h.trim()}</div></div>`).join('')
+    : `
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-shield-halved"></i></div><div class="highlight-text">RERA Registered Project</div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-tag"></i></div><div class="highlight-text">${p.badge}</div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-circle-check"></i></div><div class="highlight-text">${p.status}</div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-bed"></i></div><div class="highlight-text">${p.bhk}</div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-expand"></i></div><div class="highlight-text">${p.area || 'Area on request'}</div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fa-solid fa-star"></i></div><div class="highlight-text">Rating: ${p.rating} / 5</div></div>
+        ${p.desc ? `<div class="highlight-item" style="grid-column:1/-1"><div class="highlight-icon"><i class="fa-solid fa-align-left"></i></div><div class="highlight-text">${p.desc}</div></div>` : ''}`;
+
+  // Firebase amenities chips
+  const fbAmenities = p.amenities
+    ? p.amenities.split(',').filter(a=>a.trim()).map(a=>`
+        <div class="amenity-chip"><i class="fa-solid fa-circle-check"></i> ${a.trim()}</div>`).join('')
+    : `<div class="amenity-chip"><i class="fa-solid fa-circle-check"></i> As per project specs</div>`;
+
+  // Firebase nearby places
+  const fbNearby = p.nearby
+    ? p.nearby.split('\n').filter(n=>n.trim()).map(n=>{
+        const parts = n.split('|');
+        const nm  = parts[0]?.trim() || n.trim();
+        const typ = parts[1]?.trim() || 'Nearby';
+        const dst = parts[2]?.trim() || '';
+        return `<div class="nearby-item"><div class="nearby-icon-box"><i class="fa-solid fa-location-dot"></i></div><div><div class="nearby-name">${nm}</div><div class="nearby-type">${typ}</div></div>${dst?`<div class="nearby-dist">${dst}</div>`:''}</div>`;
+      }).join('')
+    : `<div class="nearby-item"><div class="nearby-icon-box"><i class="fa-solid fa-location-dot"></i></div><div><div class="nearby-name">Details available on site visit</div><div class="nearby-type">Contact us for more info</div></div></div>`;
+
+  const highlights = p.source === 'firebase' ? fbHighlights : staticHighlights;
+
+  // Full body HTML
+  document.getElementById('dBody').innerHTML = `
+    <h1 class="d-title">${p.name}</h1>
+    <div class="d-loc"><i class="fa-solid fa-location-dot"></i><span>${p.loc}</span></div>
+
+    <div class="d-config">
+      <div class="d-config-grid">
+        <div class="d-config-cell">
+          <div class="d-config-key">Configuration</div>
+          <div class="d-config-val">${p.bhk}</div>
+        </div>
+        <div class="d-config-cell">
+          <div class="d-config-key">Starting Price</div>
+          <div class="d-config-val">${p.price} <em>Onwards</em></div>
+        </div>
+      </div>
+      <div class="d-config-area">
+        <i class="fa-solid fa-maximize"></i>
+        <span>${p.area || 'Area on request'}</span>
+        <em>Carpet Area</em>
+      </div>
+    </div>
+
+    <div class="d-card">
+      <div class="d-card-title"><i class="fa-solid fa-certificate"></i> Highlights of ${p.name}</div>
+      <div class="highlights-grid">${highlights}</div>
+    </div>
+
+    <div class="d-card">
+      <div class="d-card-title"><i class="fa-solid fa-star"></i> Amenities</div>
+      <div class="amenities-wrap">
+        ${p.source === 'firebase' ? fbAmenities : `
+        <div class="amenity-chip"><i class="fa-solid fa-water-ladder"></i> Swimming Pool</div>
+        <div class="amenity-chip"><i class="fa-solid fa-dumbbell"></i> Equipped Gym</div>
+        <div class="amenity-chip"><i class="fa-solid fa-child"></i> Play Area</div>
+        <div class="amenity-chip"><i class="fa-solid fa-trophy"></i> Clubhouse</div>
+        <div class="amenity-chip"><i class="fa-solid fa-tree"></i> Garden</div>
+        <div class="amenity-chip"><i class="fa-solid fa-video"></i> CCTV</div>
+        <div class="amenity-chip"><i class="fa-solid fa-shuttlecock"></i> Badminton</div>
+        <div class="amenity-chip"><i class="fa-solid fa-concierge-bell"></i> Concierge</div>
+        <div class="amenity-chip"><i class="fa-solid fa-droplet"></i> Rainwater Harvesting</div>
+        <div class="amenity-chip"><i class="fa-solid fa-wheelchair"></i> Senior Zone</div>`}
+      </div>
+    </div>
+
+    <div class="d-card">
+      <div class="d-card-title"><i class="fa-solid fa-map-location-dot"></i> Nearby Places</div>
+      <div class="nearby-list">
+        ${p.source === 'firebase' ? fbNearby : `
+        <div class="nearby-item"><div class="nearby-icon-box"><i class="fa-solid fa-graduation-cap"></i></div><div><div class="nearby-name">DPS International School</div><div class="nearby-type">Education</div></div><div class="nearby-dist">0.8 km</div></div>
+        <div class="nearby-item"><div class="nearby-icon-box"><i class="fa-solid fa-hospital"></i></div><div><div class="nearby-name">Lilavati Hospital</div><div class="nearby-type">Healthcare</div></div><div class="nearby-dist">1.2 km</div></div>
+        <div class="nearby-item"><div class="nearby-icon-box"><i class="fa-solid fa-train-subway"></i></div><div><div class="nearby-name">Metro Station</div><div class="nearby-type">Transport</div></div><div class="nearby-dist">0.5 km</div></div>
+        <div class="nearby-item"><div class="nearby-icon-box"><i class="fa-solid fa-cart-shopping"></i></div><div><div class="nearby-name">D-Mart Superstore</div><div class="nearby-type">Shopping</div></div><div class="nearby-dist">0.6 km</div></div>`}
+      </div>
+    </div>
+
+    <div class="emi-wrap">
+      <div class="emi-title"><i class="fa-solid fa-calculator"></i> EMI Calculator</div>
+      <div class="emi-label">Loan Amount <span id="emiLoanVal">₹1.5 Cr</span></div>
+      <input class="emi-slider" type="range" min="50" max="1000" value="150" id="emiLoan" oninput="calcEMI()"/>
+      <div class="emi-label">Interest Rate <span id="emiRateVal">8.5%</span></div>
+      <input class="emi-slider" type="range" min="60" max="150" value="85" id="emiRate" oninput="calcEMI()"/>
+      <div class="emi-label">Tenure <span id="emiTenureVal">20 Years</span></div>
+      <input class="emi-slider" type="range" min="5" max="30" value="20" id="emiTenure" oninput="calcEMI()"/>
+      <div class="emi-result">
+        <div class="emi-result-label">Estimated Monthly EMI</div>
+        <div class="emi-result-val" id="emiResult">₹1,30,450</div>
+        <div class="emi-result-sub">*Indicative — actual may vary</div>
+      </div>
+    </div>`;
+
+  document.getElementById('detailPage').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  calcEMI();
+}
+
+function closeDetail() {
+  document.getElementById('detailPage').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function selectMediaTab(el, label) {
+  document.querySelectorAll('.m-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  showNotif(`${label} view loading...`,'info');
+}
+
+function shareProperty() {
+  const p = ALL_PROPS.find(x=>x.id===currentProp);
+  if(navigator.share) {
+    navigator.share({ title:p.name, text:`Check out ${p.name} in ${p.loc} at ${p.price}`, url:window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(()=>showNotif('Link copied to clipboard!','success'));
+  }
+}
+
+// ============================================================
+// EMI CALCULATOR
+// ============================================================
+function calcEMI() {
+  const loanEl   = document.getElementById('emiLoan');
+  const rateEl   = document.getElementById('emiRate');
+  const tenureEl = document.getElementById('emiTenure');
+  if(!loanEl || !rateEl || !tenureEl) return;
+  const loan    = parseInt(loanEl.value||150)*100000;
+  const rateRaw = parseInt(rateEl.value||85)/10;
+  const tenure  = parseInt(tenureEl.value||20);
+  const rate    = rateRaw/12/100;
+  const n       = tenure*12;
+  const emi     = loan*rate*Math.pow(1+rate,n)/(Math.pow(1+rate,n)-1);
+  const loanCr  = loan/10000000;
+  const lv = document.getElementById('emiLoanVal');   if(lv) lv.textContent   = loanCr>=1 ? `₹${loanCr.toFixed(2)} Cr` : `₹${loan/100000} L`;
+  const rv = document.getElementById('emiRateVal');   if(rv) rv.textContent   = `${rateRaw.toFixed(1)}%`;
+  const tv = document.getElementById('emiTenureVal'); if(tv) tv.textContent   = `${tenure} Years`;
+  const ev = document.getElementById('emiResult');    if(ev) ev.textContent   = `₹${Math.round(emi).toLocaleString('en-IN')}`;
+}
+
+// ============================================================
+// BOOKING
+// ============================================================
+function renderBookingDates() {
+  const el = document.getElementById('bookingDates');
+  if(!el) return;
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const today=new Date();
+  let html='';
+  for(let i=1;i<=7;i++){
+    const d=new Date(today); d.setDate(today.getDate()+i);
+    html+=`<div class="b-date${i===1?' active':''}" onclick="selectDate(this,'${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}')">
+      <div class="b-day">${days[d.getDay()]}</div>
+      <div class="b-num">${d.getDate()}</div>
+      <div class="b-mon">${months[d.getMonth()]}</div>
+    </div>`;
+    if(i===1) selDate=`${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+  }
+  el.innerHTML=html;
+}
+
+function selectDate(el,val) {
+  document.querySelectorAll('.b-date').forEach(d=>d.classList.remove('active'));
+  el.classList.add('active'); selDate=val;
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  selSlot=el.textContent.trim();
+}
+
+function openBooking() {
+  const modal = document.getElementById('bookingModal');
+  document.getElementById('bookingFormWrap').style.display='block';
+  document.getElementById('bookingSuccess').style.display='none';
+  modal.classList.add('open');
+  renderBookingDates();
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('active'));
+  selSlot='';
+}
+
+function closeBookingModal() {
+  document.getElementById('bookingModal').classList.remove('open');
+  document.getElementById('bookingFormWrap').style.display='block';
+  document.getElementById('bookingSuccess').style.display='none';
+}
+
+function closeModalOutside(e) {
+  if(e.target===document.getElementById('bookingModal')) closeBookingModal();
+}
+
+function getQuoteForm() {
+  document.getElementById('bkMessage').placeholder='Please describe the quote details or specific queries...';
+  openBooking();
+  showNotif('Fill the form to request a quote','info');
+}
+
+async function submitBooking() {
+  const fname = document.getElementById('bkFirstName').value.trim();
+  const lname = document.getElementById('bkLastName').value.trim();
+  const email = document.getElementById('bkEmail').value.trim();
+  const phone = document.getElementById('bkPhone').value.trim();
+  const msg   = document.getElementById('bkMessage').value.trim();
+  const prop  = ALL_PROPS.find(p=>p.id===currentProp);
+
+  if(!fname||!lname) { showNotif('Please enter your full name','error'); return; }
+  if(!email||!/\S+@\S+\.\S+/.test(email)) { showNotif('Please enter a valid email','error'); return; }
+  if(!phone||phone.length<8) { showNotif('Please enter a valid mobile number','error'); return; }
+  if(!selDate) { showNotif('Please select a preferred date','error'); return; }
+  if(!selSlot) { showNotif('Please select a time slot','error'); return; }
+
+  const btn = document.getElementById('bookingConfirmBtn');
+  btn.disabled=true;
+  btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+  const refId = 'MHP' + Math.floor(10000+Math.random()*89999);
+
+  const templateParams = {
+    to_name:    `${fname} ${lname}`,
+    to_email:   email,
+    from_name:  'VJ PROPERTIES',
+    property:   prop.name,
+    location:   prop.loc,
+    price:      prop.price,
+    visit_date: selDate,
+    visit_time: selSlot,
+    phone:      phone,
+    message:    msg||'No additional message',
+    ref_id:     refId,
+    reply_to:   email,
+  };
+
+  let emailSent = false;
+  try {
+    if(EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID') {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      emailSent = true;
+    }
+  } catch(err) {
+    console.warn('EmailJS error:', err);
+  }
+
+  btn.disabled=false;
+  btn.innerHTML='<i class="fa-solid fa-calendar-check"></i> Confirm Site Visit';
+
+  // Show success regardless (EmailJS optional)
+  document.getElementById('bookingFormWrap').style.display='none';
+  document.getElementById('bookingSuccess').style.display='block';
+  document.getElementById('bookingRefBox').innerHTML=`
+    <div class="ref-row"><div class="ref-key"><i class="fa-solid fa-hashtag"></i> Reference ID</div><div class="ref-val">${refId}</div></div>
+    <div class="ref-row"><div class="ref-key"><i class="fa-solid fa-building"></i> Property</div><div class="ref-val">${prop.name}</div></div>
+    <div class="ref-row"><div class="ref-key"><i class="fa-solid fa-location-dot"></i> Location</div><div class="ref-val">${prop.loc}</div></div>
+    <div class="ref-row"><div class="ref-key"><i class="fa-solid fa-calendar"></i> Date</div><div class="ref-val">${selDate}</div></div>
+    <div class="ref-row"><div class="ref-key"><i class="fa-regular fa-clock"></i> Time</div><div class="ref-val">${selSlot}</div></div>
+    <div class="ref-row"><div class="ref-key"><i class="fa-solid fa-user"></i> Name</div><div class="ref-val">${fname} ${lname}</div></div>
+    <div class="ref-row"><div class="ref-key"><i class="fa-solid fa-envelope"></i> Email</div><div class="ref-val">${email}</div></div>
+    ${emailSent ? '<div style="margin-top:8px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:7px;padding:8px 10px;font-size:.72rem;color:#059669;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-paper-plane"></i> Confirmation email sent to '+email+'</div>' : '<div style="margin-top:8px;background:rgba(201,168,76,.06);border:1px dashed rgba(201,168,76,.3);border-radius:7px;padding:8px 10px;font-size:.7rem;color:var(--gray2);display:flex;align-items:center;gap:6px"><i class="fa-solid fa-circle-info" style="color:var(--gold)"></i> Configure EmailJS keys to enable email notifications.</div>'}`;
+
+  showNotif(emailSent ? 'Booking confirmed! Email sent.' : 'Booking confirmed!', 'success');
+}
+
+
+// ============================================================
+// CITY DROPDOWN
+// ============================================================
+function toggleCityDropdown() {
+  document.getElementById('cityDropdown').classList.toggle('open');
+}
+function selectCity(e, city) {
+  e.stopPropagation();
+  document.getElementById('cityLabel').textContent = city;
+  document.getElementById('cityDropdown').classList.remove('open');
+  quickSearch(city);
+}
+document.addEventListener('click', e=>{
+  if(!document.getElementById('cityBtn')?.contains(e.target)) {
+    document.getElementById('cityDropdown')?.classList.remove('open');
+  }
+});
+
+// ============================================================
+// PROP TYPE TAB
+// ============================================================
+function selectPropTab(el) {
+  document.querySelectorAll('.prop-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const type = el.dataset.type;
+  const labels={all:'Residential Properties', commercial:'Commercial Properties', construction:'Under Construction', plot:'Plots & Land'};
+  if(type==='all') return;
+  showNotif(`Loading ${labels[type]}...`,'info');
+  quickSearch(labels[type]);
+}
+
+// ============================================================
+// FOOTER ACCORDION
+// ============================================================
+function toggleAcc(item) { item.classList.toggle('open'); }
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goHome() {
+  document.getElementById('bnHome').classList.add('active');
+  closeSearchOverlay();
+  closeDetail();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+function openProfileModal() { document.getElementById('profileModal').classList.add('open'); }
+
+</script>
+<!-- ======================================================
+     ADMIN PANEL
+====================================================== -->
+<div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdminPanel()">
+  <div class="admin-box">
+
+    <!-- Header -->
+    <div class="admin-hdr">
+      <div class="admin-hdr-left">
+        <div class="admin-hdr-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <div class="admin-hdr-title" id="admTitle">Admin Portal</div>
+          <div class="admin-hdr-sub" id="admSub">VJ PROPERTIES</div>
+        </div>
+      </div>
+      <button class="admin-hdr-close" onclick="closeAdminPanel()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div class="admin-body" id="admLogin">
+      <div style="text-align:center;padding:6px 0 2px">
+        <div class="adm-login-icon"><i class="fa-solid fa-lock"></i></div>
+        <div class="adm-login-title">Admin Sign In</div>
+        <div class="adm-login-sub">Enter your Firebase admin credentials to manage properties on VJ PROPERTIES</div>
+      </div>
+
+      <div class="adm-err" id="admErr"><i class="fa-solid fa-circle-xmark"></i><span id="admErrTxt"></span></div>
+
+      <div class="adm-input-wrap">
+        <i class="adm-input-ico fa-solid fa-envelope"></i>
+        <input class="adm-inp" id="admEmail" type="email" placeholder="admin@magichome.com"
+          onkeydown="if(event.key==='Enter')document.getElementById('admPass').focus()"/>
+      </div>
+      <div class="adm-input-wrap" style="margin-bottom:16px">
+        <i class="adm-input-ico fa-solid fa-lock"></i>
+        <input class="adm-inp" id="admPass" type="password" placeholder="••••••••••" style="padding-right:38px"
+          onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+        <button class="adm-eye" onclick="toggleAdmEye()" id="admEyeBtn"><i class="fa-solid fa-eye" id="admEyeIco"></i></button>
+      </div>
+
+
+
+      <button class="adm-login-btn" id="admLoginBtn" onclick="doAdminLogin()">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In to Admin Panel
+      </button>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div class="admin-body" id="admDash" style="display:none">
+      <div class="adm-connected" id="admConnected">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="admConnectedTxt">Connected to Firebase</span>
+      </div>
+      <div class="adm-dash-bar">
+        <div class="adm-dash-title"><i class="fa-solid fa-chart-bar"></i> Dashboard</div>
+        <button class="adm-signout-btn" onclick="doAdminLogout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+      </div>
+      <div class="adm-stats-row">
+        <div class="adm-stat-card"><div class="adm-stat-num" id="stTotal">—</div><div class="adm-stat-lbl">Total</div></div>
+        <div class="adm-stat-card"><div class="adm-stat-num" id="stFirebase">—</div><div class="adm-stat-lbl">Firebase</div></div>
+        <div class="adm-stat-card"><div class="adm-stat-num" id="stReady">—</div><div class="adm-stat-lbl">Ready</div></div>
+      </div>
+      <button class="adm-add-btn" onclick="showAdmAddForm()">
+        <i class="fa-solid fa-plus"></i> Add New Property
+      </button>
+      <div class="adm-list-label"><i class="fa-solid fa-list"></i> All Properties</div>
+      <div class="adm-prop-list" id="admPropList">
+        <div style="text-align:center;padding:20px;color:var(--gray2);font-size:.8rem">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size:1.2rem;color:var(--gold);display:block;margin-bottom:8px"></i>
+          Loading...
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD PROPERTY FORM -->
+    <div class="admin-body" id="admAddForm" style="display:none">
+      <div class="adm-form-title"><i class="fa-solid fa-plus-circle"></i> Add New Property</div>
+
+      <div class="adm-form-row">
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-building"></i> Property Name <span class="req">*</span></div>
+          <input class="adm-inp-plain" id="apName" placeholder="e.g. Emerald Heights"/>
+        </div>
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-location-dot"></i> Location <span class="req">*</span></div>
+          <input class="adm-inp-plain" id="apLoc" placeholder="e.g. Bandra West, Mumbai"/>
+        </div>
+      </div>
+
+      <div class="adm-form-row">
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-indian-rupee-sign"></i> Price <span class="req">*</span></div>
+          <input class="adm-inp-plain" id="apPrice" placeholder="e.g. ₹2.5 Cr – ₹4.2 Cr"/>
+        </div>
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-bed"></i> BHK Config <span class="req">*</span></div>
+          <input class="adm-inp-plain" id="apBhk" placeholder="e.g. 2, 3 BHK"/>
+        </div>
+      </div>
+
+      <div class="adm-form-row">
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-expand"></i> Area</div>
+          <input class="adm-inp-plain" id="apArea" placeholder="e.g. 900 to 1,500 SqFt"/>
+        </div>
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-star"></i> Rating (1–5)</div>
+          <input class="adm-inp-plain" id="apRating" type="number" min="1" max="5" step="0.1" placeholder="4.5"/>
+        </div>
+      </div>
+
+      <div class="adm-form-row">
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-tag"></i> Badge</div>
+          <select class="adm-select" id="apBadge">
+            <option value="RERA Verified">RERA Verified</option>
+            <option value="New Launch">New Launch</option>
+            <option value="Pre-Launch">Pre-Launch</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Best Value">Best Value</option>
+            <option value="Featured">Featured</option>
+            <option value="Trending">Trending</option>
+            <option value="Premium">Premium</option>
+          </select>
+        </div>
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-circle-info"></i> Status <span class="req">*</span></div>
+          <select class="adm-select" id="apStatus">
+            <option value="Ready to Move">Ready to Move</option>
+            <option value="New Launch">New Launch</option>
+            <option value="Under Construction">Under Construction</option>
+            <option value="Pre-Launch">Pre-Launch</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="adm-form-row">
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-home"></i> Property Type</div>
+          <select class="adm-select" id="apType">
+            <option value="Apartment">Apartment</option>
+            <option value="Villa">Villa</option>
+            <option value="Plot">Plot</option>
+            <option value="Studio">Studio</option>
+            <option value="Commercial">Commercial</option>
+          </select>
+        </div>
+        <div class="adm-form-grp">
+          <div class="adm-form-lbl"><i class="fa-solid fa-layer-group"></i> Show In Section</div>
+          <select class="adm-select" id="apSection">
+            <option value="launches">New Launches</option>
+            <option value="recent">Recently Launched</option>
+            <option value="topSelling">Top Selling</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="adm-form-grp">
+        <div class="adm-form-lbl"><i class="fa-solid fa-image"></i> Property Image <span class="req">*</span></div>
+        <label for="apImgFile" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px dashed var(--gold);border-radius:9px;cursor:pointer;background:rgba(201,168,76,.04);transition:.2s" onmouseover="this.style.background='rgba(201,168,76,.08)'" onmouseout="this.style.background='rgba(201,168,76,.04)'">
+          <i class="fa-solid fa-cloud-arrow-up" style="color:var(--gold);font-size:1.3rem"></i>
+          <div>
+            <div style="font-size:.8rem;font-weight:600;color:var(--navy)">Click to upload image</div>
+            <div style="font-size:.68rem;color:var(--gray2)">JPG, PNG, WEBP — from your device</div>
+          </div>
+        </label>
+        <input type="file" id="apImgFile" accept="image/*" style="display:none" onchange="handleImgUpload(this)"/>
+        <div class="adm-img-preview" id="admImgPreviewWrap" style="margin-top:8px"><img id="admImgPreview" src="" alt="Preview"/></div>
+        <input type="hidden" id="apImg" value=""/>
+      </div>
+
+      <div class="adm-form-grp">
+        <div class="adm-form-lbl"><i class="fa-solid fa-align-left"></i> Description (Optional)</div>
+        <textarea class="adm-inp-plain" id="apDesc" rows="2" placeholder="Brief description..." style="resize:none"></textarea>
+      </div>
+
+      <div class="adm-form-grp">
+        <div class="adm-form-lbl"><i class="fa-solid fa-certificate"></i> Highlights (one per line)</div>
+        <textarea class="adm-inp-plain" id="apHighlights" rows="4" placeholder="RERA Registered Project&#10;24/7 Gated Security&#10;Covered Parking&#10;Power Backup" style="resize:none"></textarea>
+      </div>
+
+      <div class="adm-form-grp">
+        <div class="adm-form-lbl"><i class="fa-solid fa-star"></i> Amenities (comma separated)</div>
+        <textarea class="adm-inp-plain" id="apAmenities" rows="3" placeholder="Swimming Pool, Gym, Clubhouse, Garden, CCTV, Play Area" style="resize:none"></textarea>
+      </div>
+
+      <div class="adm-form-grp">
+        <div class="adm-form-lbl"><i class="fa-solid fa-map-location-dot"></i> Nearby Places (format: Name|Type|Distance — one per line)</div>
+        <textarea class="adm-inp-plain" id="apNearby" rows="4" placeholder="City Hospital|Healthcare|1.2 km&#10;Metro Station|Transport|0.5 km&#10;Local School|Education|0.8 km&#10;Shopping Mall|Shopping|1.0 km" style="resize:none"></textarea>
+      </div>
+
+      <div class="adm-form-err" id="admFormErr"><i class="fa-solid fa-circle-xmark"></i><span id="admFormErrTxt"></span></div>
+
+      <button class="adm-submit-btn" id="admSubmitBtn" onclick="submitAdmProperty()">
+        <i class="fa-brands fa-google"></i> Save to Firebase &amp; Publish Live
+      </button>
+      <button class="adm-back-btn" onclick="showAdmDashboard()">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// FIREBASE CONFIG — replace these values with yours from
+// console.firebase.google.com → Project Settings → Your Apps
+// ============================================================
+const FB_PROJECT = "mksp-5e0ec";
+const FB_API_KEY  = "AIzaSyAdzhP0Vt3bZUelFmUH46QdIr4luCWlrs8";
+
+// ---- Firebase SDK init ----
+let _fbApp = null, _fbDB = null;
+function getDB() {
+  if (_fbDB) return _fbDB;
+  if (typeof firebase === 'undefined') throw new Error('firebase is not defined');
+  try {
+    _fbApp = firebase.apps.length ? firebase.apps[0] : firebase.initializeApp({
+      apiKey:    FB_API_KEY,
+      authDomain:"mksp-5e0ec.firebaseapp.com",
+      projectId: FB_PROJECT,
+    });
+    _fbDB = firebase.firestore();
+    return _fbDB;
+  } catch(e) {
+    throw new Error('Firebase init failed: ' + e.message);
+  }
+}
+
+// ---- Firestore helpers (SDK) ----
+async function fsRead() {
+  const db   = getDB();
+  const snap = await db.collection('properties').get();
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+async function fsWrite(data) {
+  const db  = getDB();
+  const ref = await db.collection('properties').add(data);
+  return ref.id;
+}
+
+async function fsDelete(docId) {
+  const db = getDB();
+  await db.collection('properties').doc(docId).delete();
+}
+
+// Load Firebase properties and merge into ALL_PROPS
+async function loadFbProps() {
+  try {
+    const docs = await fsRead();
+    const fbProps = docs.map(x => ({
+      id:         x.id,
+      name:       x.name       || '',
+      loc:        x.loc        || '',
+      price:      x.price      || '',
+      priceNum:   x.priceNum   || 0,
+      bhk:        x.bhk        || '',
+      area:       x.area       || '',
+      img:        x.img        || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
+      badge:      x.badge      || 'New',
+      badgeClass: x.badgeClass || '',
+      rating:     x.rating     || 4.5,
+      status:     x.status     || 'Ready to Move',
+      section:    Array.isArray(x.section) ? x.section : ['launches','recent','topSelling','all'],
+      desc:       x.desc       || '',
+      highlights: x.highlights || '',
+      amenities:  x.amenities  || '',
+      nearby:     x.nearby     || '',
+      source:     'firebase'
+    }));
+    ALL_PROPS = [...fbProps, ...ALL_PROPS.filter(p => p.source !== 'firebase')];
+    allSearchData = [...ALL_PROPS];
+    renderSection('launchesScroll',   'launches');
+    renderSection('recentScroll',     'recent');
+    renderSection('topSellingScroll', 'topSelling');
+    if (document.getElementById('admDash').style.display !== 'none') {
+      renderAdmList(); updateAdmStats();
+    }
+  } catch(e) { console.warn('Firebase load error:', e.message); }
+}
+
+// Start live listener for real-time updates
+function startLiveListener() {
+  try {
+    const db = getDB();
+    db.collection('properties').onSnapshot(snap => {
+      const fbProps = snap.docs.map(d => {
+        const x = d.data();
+        return {
+          id:         d.id,
+          name:       x.name       || '',
+          loc:        x.loc        || '',
+          price:      x.price      || '',
+          priceNum:   x.priceNum   || 0,
+          bhk:        x.bhk        || '',
+          area:       x.area       || '',
+          img:        x.img        || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
+          badge:      x.badge      || 'New',
+          badgeClass: x.badgeClass || '',
+          rating:     x.rating     || 4.5,
+          status:     x.status     || 'Ready to Move',
+          section:    Array.isArray(x.section) ? x.section : ['launches','recent','topSelling','all'],
+          desc:       x.desc       || '',
+          highlights: x.highlights || '',
+          amenities:  x.amenities  || '',
+          nearby:     x.nearby     || '',
+          source:     'firebase'
+        };
+      });
+      ALL_PROPS = [...fbProps, ...ALL_PROPS.filter(p => p.source !== 'firebase')];
+      allSearchData = [...ALL_PROPS];
+      renderSection('launchesScroll',   'launches');
+      renderSection('recentScroll',     'recent');
+      renderSection('topSellingScroll', 'topSelling');
+      if (document.getElementById('admDash').style.display !== 'none') {
+        renderAdmList(); updateAdmStats();
+      }
+    }, e => console.warn('Firestore listener:', e.message));
+  } catch(e) { console.warn('Live listener failed:', e.message); }
+}
+
+// Load on page start + start live listener
+window.addEventListener('load', () => {
+  loadFbProps();
+  startLiveListener();
+});
+
+// ---- Panel open/close ----
+// ---- Admin credentials (change these to your own) ----
+const ADMIN_EMAIL    = "admin@magichome.com";
+const ADMIN_PASSWORD = "MagicHome@2025";
+
+function openAdminPanel() {
+  document.getElementById('adminOverlay').classList.add('open');
+  if (sessionStorage.getItem('admLoggedIn') === 'true') {
+    showAdmDashboard();
+  } else {
+    showAdmLogin();
+  }
+}
+function closeAdminPanel() {
+  document.getElementById('adminOverlay').classList.remove('open');
+}
+
+// ---- Screen switches ----
+function showAdmLogin() {
+  document.getElementById('admLogin').style.display   = 'block';
+  document.getElementById('admDash').style.display    = 'none';
+  document.getElementById('admAddForm').style.display = 'none';
+  document.getElementById('admTitle').textContent     = 'Admin Portal';
+  document.getElementById('admSub').textContent       = 'VJ PROPERTIES';
+  document.getElementById('admErr').classList.remove('show');
+  document.getElementById('admEmail').value = '';
+  document.getElementById('admPass').value  = '';
+}
+function showAdmDashboard() {
+  document.getElementById('admLogin').style.display   = 'none';
+  document.getElementById('admDash').style.display    = 'block';
+  document.getElementById('admAddForm').style.display = 'none';
+  document.getElementById('admTitle').textContent     = 'Dashboard';
+  document.getElementById('admSub').textContent       = 'VJ PROPERTIESVJ PROPERTIES';
+  document.getElementById('admConnectedTxt').textContent = 'Firebase connected · mksp-5e0ec';
+  loadFbProps();
+  renderAdmList(); updateAdmStats();
+}
+function showAdmAddForm() {
+  document.getElementById('admLogin').style.display   = 'none';
+  document.getElementById('admDash').style.display    = 'none';
+  document.getElementById('admAddForm').style.display = 'block';
+  document.getElementById('admTitle').textContent     = 'Add Property';
+  document.getElementById('admSub').textContent       = 'Publishes live to all visitors';
+  document.getElementById('admFormErr').classList.remove('show');
+  ['apName','apLoc','apPrice','apBhk','apArea','apDesc','apHighlights','apAmenities','apNearby'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('apImg').value = '';
+  const fileInput = document.getElementById('apImgFile');
+  if (fileInput) fileInput.value = '';
+  document.getElementById('apRating').value = '4.5';
+  document.getElementById('admImgPreviewWrap').style.display = 'none';
+}
+
+// ---- Password eye toggle ----
+function toggleAdmEye() {
+  const inp = document.getElementById('admPass');
+  const ico = document.getElementById('admEyeIco');
+  if (inp.type === 'password') { inp.type = 'text';     ico.className = 'fa-solid fa-eye-slash'; }
+  else                         { inp.type = 'password'; ico.className = 'fa-solid fa-eye'; }
+}
+
+// ---- Login (simple password check) ----
+async function doAdminLogin() {
+  const email = document.getElementById('admEmail').value.trim();
+  const pass  = document.getElementById('admPass').value;
+  const errEl = document.getElementById('admErr');
+  const errTx = document.getElementById('admErrTxt');
+  const btn   = document.getElementById('admLoginBtn');
+  errEl.classList.remove('show');
+
+  if (!email) { errTx.textContent = 'Please enter your email.';    errEl.classList.add('show'); return; }
+  if (!pass)  { errTx.textContent = 'Please enter your password.'; errEl.classList.add('show'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+
+  await new Promise(r => setTimeout(r, 500));
+
+  if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('admLoggedIn', 'true');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In to Admin Panel';
+    showNotif('Welcome, Admin!', 'success');
+    showAdmDashboard();
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In to Admin Panel';
+    errTx.textContent = 'Incorrect email or password.';
+    errEl.classList.add('show');
+  }
+}
+
+// ---- Logout ----
+async function doAdminLogout() {
+  sessionStorage.removeItem('admLoggedIn');
+  showNotif('Signed out from admin', 'info');
+  closeAdminPanel();
+}
+
+// ---- Render property list in admin ----
+function renderAdmList() {
+  const el = document.getElementById('admPropList');
+  if (!el) return;
+  if (ALL_PROPS.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray2);font-size:.8rem">No properties yet.</div>';
+    return;
+  }
+  el.innerHTML = ALL_PROPS.map(p => `
+    <div class="adm-prop-item">
+      <img class="adm-prop-thumb" src="${p.img}" alt="${p.name}" loading="lazy"
+        onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&q=60'"/>
+      <div class="adm-prop-info">
+        <div class="adm-prop-name">${p.name}</div>
+        <div class="adm-prop-loc">${p.loc}</div>
+        <div class="adm-prop-price">${p.price}</div>
+        <span class="adm-src-badge ${p.source==='firebase'?'firebase':'static'}">
+          <i class="fa-brands ${p.source==='firebase'?'fa-google':'fa-html5'}"></i>
+          ${p.source==='firebase'?'Firebase · Live':'Built-in'}
+        </span>
+      </div>
+      ${p.source==='firebase'
+        ? `<button class="adm-del-btn" onclick="deleteAdmProp('${p.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>`
+        : `<div class="adm-lock-btn" title="Built-in"><i class="fa-solid fa-lock"></i></div>`}
+    </div>`).join('');
+}
+
+function updateAdmStats() {
+  const fbCount = ALL_PROPS.filter(p => p.source === 'firebase').length;
+  document.getElementById('stTotal').textContent    = ALL_PROPS.length;
+  document.getElementById('stFirebase').textContent = fbCount;
+  document.getElementById('stReady').textContent    = ALL_PROPS.filter(p => p.status === 'Ready to Move').length;
+}
+
+// ---- Image upload from device ----
+function handleImgUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const wrap = document.getElementById('admImgPreviewWrap');
+  const img  = document.getElementById('admImgPreview');
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    img.src = e.target.result;
+    wrap.style.display = 'block';
+    document.getElementById('apImg').value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ---- Submit new property via REST API ----
+async function submitAdmProperty() {
+  const name   = document.getElementById('apName').value.trim();
+  const loc    = document.getElementById('apLoc').value.trim();
+  const price  = document.getElementById('apPrice').value.trim();
+  const bhk    = document.getElementById('apBhk').value.trim();
+  const area   = document.getElementById('apArea').value.trim();
+  const img    = document.getElementById('apImg').value.trim();
+  const badge  = document.getElementById('apBadge').value;
+  const status = document.getElementById('apStatus').value;
+  const section= document.getElementById('apSection').value;
+  const rating = parseFloat(document.getElementById('apRating').value) || 4.5;
+  const desc       = document.getElementById('apDesc').value.trim();
+  const highlights = document.getElementById('apHighlights').value.trim();
+  const amenities  = document.getElementById('apAmenities').value.trim();
+  const nearby     = document.getElementById('apNearby').value.trim();
+  const errEl  = document.getElementById('admFormErr');
+  const errTx  = document.getElementById('admFormErrTxt');
+  errEl.classList.remove('show');
+
+  if (!name)  { errTx.textContent = 'Property name is required.';     errEl.classList.add('show'); return; }
+  if (!loc)   { errTx.textContent = 'Location is required.';           errEl.classList.add('show'); return; }
+  if (!price) { errTx.textContent = 'Price is required.';              errEl.classList.add('show'); return; }
+  if (!bhk)   { errTx.textContent = 'BHK configuration is required.'; errEl.classList.add('show'); return; }
+  if (!img)   { errTx.textContent = 'Image URL is required.';          errEl.classList.add('show'); return; }
+
+  const btn = document.getElementById('admSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving to Firebase…';
+
+  const badgeClass = badge === 'Luxury' ? 'badge-purple'
+                   : ['New Launch','Pre-Launch'].includes(badge) ? 'badge-green' : '';
+  const priceNum   = parseFloat(price.replace(/[^0-9.]/g,'')) || 0;
+
+  try {
+    await fsWrite({
+      name, loc, price, priceNum, bhk,
+      area:       area || 'On request',
+      img, badge, badgeClass, status, rating, desc,
+      highlights, amenities, nearby,
+      section:    ['launches', 'recent', 'topSelling', 'all'],
+      source:     'firebase',
+      createdAt:  new Date().toISOString()
+    });
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-brands fa-google"></i> Save to Firebase &amp; Publish Live';
+    showNotif(`"${name}" is now live! 🎉`, 'success');
+    await loadFbProps();
+    renderSection('launchesScroll',   'launches');
+    renderSection('recentScroll',     'recent');
+    renderSection('topSellingScroll', 'topSelling');
+    showAdmDashboard();
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-brands fa-google"></i> Save to Firebase &amp; Publish Live';
+    const msg = e.message || 'Unknown error';
+    errTx.textContent = msg;
+    errEl.classList.add('show');
+  }
+}
+
+// ---- Delete property via REST API ----
+async function deleteAdmProp(docId) {
+  if (!confirm('Delete this property? This cannot be undone.')) return;
+  try {
+    await fsDelete(docId);
+    showNotif('Property deleted', 'info');
+    await loadFbProps();
+    renderAdmList(); updateAdmStats();
+  } catch(e) {
+    showNotif('Delete failed: ' + e.message, 'error');
+  }
+}
+</script>
+</body>
+</html>
