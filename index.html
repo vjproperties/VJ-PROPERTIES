@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>VJ PROPERTIES – Buy. Sell. Rent.</title>
+<title>Magic Home Properties – Buy. Sell. Rent.</title>
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -937,6 +937,42 @@ a{text-decoration:none;color:inherit}
 }
 
 /* ============================================================
+   DESKTOP LAYOUT (768px+)
+   ============================================================ */
+@media(min-width:768px){
+  body{max-width:100%;padding-bottom:0}
+  .bottom-nav{display:none}
+  .header{padding:0 40px;height:68px}
+  .logo-name{font-size:1.1rem}
+  .logo-icon{width:42px;height:42px;font-size:20px}
+  .hero{padding:48px 40px 40px}
+  .hero-title{font-size:clamp(2.2rem,4vw,3.6rem)}
+  .prop-tabs{gap:14px}
+  .prop-tab{min-width:150px;padding:12px 18px}
+  .section{padding:40px 0}
+  .section-head{padding:0 40px;margin-bottom:20px}
+  .section-title{font-size:1.9rem}
+  .cards-scroll{padding:4px 40px 16px;gap:20px}
+  .prop-card{flex:0 0 280px}
+  .builders-scroll,.testi-scroll,.articles-scroll{padding:4px 40px 16px}
+  .discount-banner{margin:0 40px 32px}
+  .stats-strip .stat-cell{min-width:130px;padding:14px 20px}
+  .footer{padding:32px 40px 24px}
+  .detail-page{left:50%;transform:translateX(-50%);max-width:640px}
+  .detail-cta{left:50%;transform:translateX(-50%);max-width:640px}
+  .modal-overlay .booking-sheet{max-width:520px;margin:0 auto;border-radius:var(--r2)}
+  .wishlist-panel .wishlist-sheet{max-width:520px;margin:0 auto}
+  .search-results-overlay{max-width:100%}
+  .search-results-body{max-width:900px;margin:0 auto}
+  .search-results-grid{grid-template-columns:repeat(3,1fr)}
+  .admin-overlay .admin-box{max-width:520px}
+  .compare-modal .compare-sheet{max-width:900px}
+  .notif{max-width:480px}
+  .compare-strip{left:0;transform:none;max-width:100%}
+  .compare-strip.show{transform:translateY(0)}
+}
+
+/* ============================================================
    ADMIN PANEL STYLES
    ============================================================ */
 .admin-overlay{
@@ -1143,8 +1179,8 @@ a{text-decoration:none;color:inherit}
   <div class="header-logo" onclick="scrollToTop()">
     <div class="logo-icon"><i class="fa-solid fa-house-chimney"></i></div>
     <div>
-      <div class="logo-name">VJ </div>
-      <div class="logo-tag">PROPERTIES</div>
+      <div class="logo-name">Magic Home</div>
+      <div class="logo-tag">Properties</div>
     </div>
   </div>
   <div class="header-right">
@@ -1335,7 +1371,7 @@ a{text-decoration:none;color:inherit}
 <footer class="footer">
   <div id="footerAccordion"></div>
   <div class="footer-about">
-    We at <strong>VJ PROPERTIES</strong> assist home buyers in negotiating with developers, act on behalf of our customers, and ensure you receive the best deal in the market. We are recognised as the <strong>"Leading Property Advisors in India"</strong> for several consecutive years — with <strong>0% brokerage</strong> and complete end-to-end support.
+    We at <strong>Magic Home Properties</strong> assist home buyers in negotiating with developers, act on behalf of our customers, and ensure you receive the best deal in the market. We are recognised as the <strong>"Leading Property Advisors in India"</strong> for several consecutive years — with <strong>0% brokerage</strong> and complete end-to-end support.
   </div>
   <div class="footer-socials">
     <a class="footer-social" href="https://facebook.com" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
@@ -1345,7 +1381,7 @@ a{text-decoration:none;color:inherit}
     <a class="footer-social" href="https://youtube.com" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
   </div>
   <div class="footer-copy">
-    &copy; 2025 VJ PROPERTIES Pvt. Ltd. All Rights Reserved.
+    &copy; 2025 Magic Home Properties Pvt. Ltd. All Rights Reserved.
     <div class="footer-badges">
       <span class="footer-badge">RERA CERTIFIED</span>
       <span class="footer-badge">ISO 27001</span>
@@ -1613,9 +1649,9 @@ const BUILDERS_DATA = [
 ];
 
 const TESTI_DATA = [
-  { name:'Kaushik Datta', role:'IT Professional', rating:4.5, img:'https://randomuser.me/api/portraits/men/41.jpg', text:'VJ PROPERTIES understood our needs and helped us finalise the perfect home in a short span. With their support, we made the right buying decision at the right time.' },
+  { name:'Kaushik Datta', role:'IT Professional', rating:4.5, img:'https://randomuser.me/api/portraits/men/41.jpg', text:'Magic Home Properties understood our needs and helped us finalise the perfect home in a short span. With their support, we made the right buying decision at the right time.' },
   { name:'Sunita Desai',  role:'Business Owner',   rating:5,   img:'https://randomuser.me/api/portraits/women/35.jpg', text:'Found our villa within a week! Verified listings gave us complete confidence. Truly a premium experience from the first call to final registration.' },
-  { name:'Rohit Nair',    role:'NRI Investor',     rating:5,   img:'https://randomuser.me/api/portraits/men/62.jpg', text:'As an NRI buyer I was nervous, but VJ PROPERTIES handled everything end-to-end. The virtual tours and documentation were absolutely seamless.' },
+  { name:'Rohit Nair',    role:'NRI Investor',     rating:5,   img:'https://randomuser.me/api/portraits/men/62.jpg', text:'As an NRI buyer I was nervous, but Magic Home handled everything end-to-end. The virtual tours and documentation were absolutely seamless.' },
   { name:'Meera Joshi',   role:'Teacher',          rating:4.5, img:'https://randomuser.me/api/portraits/women/22.jpg', text:'The 0% brokerage promise is real! They saved us ₹4 lakhs. Team was helpful throughout and helped us negotiate the best deal with the builder.' },
 ];
 
@@ -1851,14 +1887,14 @@ function renderWishlist() {
     content.innerHTML=`<div class="wishlist-empty"><i class="fa-solid fa-heart"></i><p>No saved properties yet.<br>Tap the heart icon on any listing.</p></div>`;
     return;
   }
-  const props = ALL_PROPS.filter(p=>wishlist.has(p.id));
+  const props = ALL_PROPS.filter(p=>wishlist.has(String(p.id)));
   content.innerHTML=`<div class="wishlist-grid">${props.map(p=>`
-    <div class="wish-card" onclick="closeWishlistPanel();openDetail(${p.id})">
+    <div class="wish-card" onclick="closeWishlistPanel();openDetail('${p.id}')">
       <div class="wish-card-img"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
       <div class="wish-card-body">
         <div class="wish-card-name">${p.name}</div>
         <div class="wish-card-price">${p.price}</div>
-        <button class="wish-remove" onclick="event.stopPropagation();toggleWish(${p.id},null);renderWishlist()">
+        <button class="wish-remove" onclick="event.stopPropagation();toggleWish('${p.id}',null);renderWishlist()">
           <i class="fa-solid fa-trash"></i> Remove
         </button>
       </div>
@@ -2334,7 +2370,7 @@ async function submitBooking() {
   const templateParams = {
     to_name:    `${fname} ${lname}`,
     to_email:   email,
-    from_name:  'VJ PROPERTIES',
+    from_name:  'Magic Home Properties',
     property:   prop.name,
     location:   prop.loc,
     price:      prop.price,
@@ -2437,7 +2473,7 @@ function openProfileModal() { document.getElementById('profileModal').classList.
         <div class="admin-hdr-icon"><i class="fa-solid fa-shield-halved"></i></div>
         <div>
           <div class="admin-hdr-title" id="admTitle">Admin Portal</div>
-          <div class="admin-hdr-sub" id="admSub">VJ PROPERTIES</div>
+          <div class="admin-hdr-sub" id="admSub">Magic Home Properties</div>
         </div>
       </div>
       <button class="admin-hdr-close" onclick="closeAdminPanel()"><i class="fa-solid fa-xmark"></i></button>
@@ -2448,7 +2484,7 @@ function openProfileModal() { document.getElementById('profileModal').classList.
       <div style="text-align:center;padding:6px 0 2px">
         <div class="adm-login-icon"><i class="fa-solid fa-lock"></i></div>
         <div class="adm-login-title">Admin Sign In</div>
-        <div class="adm-login-sub">Enter your Firebase admin credentials to manage properties on VJ PROPERTIES</div>
+        <div class="adm-login-sub">Enter your Firebase admin credentials to manage properties on Magic Home Properties</div>
       </div>
 
       <div class="adm-err" id="admErr"><i class="fa-solid fa-circle-xmark"></i><span id="admErrTxt"></span></div>
@@ -2777,7 +2813,7 @@ function showAdmLogin() {
   document.getElementById('admDash').style.display    = 'none';
   document.getElementById('admAddForm').style.display = 'none';
   document.getElementById('admTitle').textContent     = 'Admin Portal';
-  document.getElementById('admSub').textContent       = 'VJ PROPERTIES';
+  document.getElementById('admSub').textContent       = 'Magic Home Properties';
   document.getElementById('admErr').classList.remove('show');
   document.getElementById('admEmail').value = '';
   document.getElementById('admPass').value  = '';
@@ -2787,7 +2823,7 @@ function showAdmDashboard() {
   document.getElementById('admDash').style.display    = 'block';
   document.getElementById('admAddForm').style.display = 'none';
   document.getElementById('admTitle').textContent     = 'Dashboard';
-  document.getElementById('admSub').textContent       = 'VJ PROPERTIESVJ PROPERTIES';
+  document.getElementById('admSub').textContent       = 'Magic Home Properties';
   document.getElementById('admConnectedTxt').textContent = 'Firebase connected · mksp-5e0ec';
   loadFbProps();
   renderAdmList(); updateAdmStats();
